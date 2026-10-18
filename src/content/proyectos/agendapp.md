@@ -57,10 +57,9 @@ caso:
     - { imagen: ../../assets/proyectos/martega6.jpeg, texto: Panel del barbero }
   stack: [Next.js 16, TypeScript, PostgreSQL, Prisma, PWA, Notificaciones push]
   testimonio:
-    texto: "Pedirle a Martín una frase sobre cómo le cambió el trabajo (con permiso para publicarla)"
+    texto: "Desde que uso la app tengo la cabeza más tranquila para organizarme, y mejoró el flujo de clientes."
     autor: "Martín Díaz"
     rol: "Dueño de Martega's Barber Shop"
-    pendiente: true
 
 links:
   vivo: https://martegas.vercel.app

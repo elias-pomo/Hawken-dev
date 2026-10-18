@@ -83,7 +83,7 @@ p { margin: 0; max-width: 60ch; }
 .bk .btn--lima { border-color: var(--lima); }
 .btn--dark { background: var(--negro); color: var(--lima); border-color: var(--negro); box-shadow: var(--offset) var(--offset) 0 var(--blanco); }
 .btn--ghost {
-  box-shadow: none; border-color: transparent; padding-inline: 4px;
+  background: transparent; box-shadow: none; border-color: transparent; padding-inline: 4px;
   text-decoration: underline; text-decoration-thickness: 3px; text-underline-offset: 8px;
 }
 .btn--ghost:hover, .btn--ghost:active { transform: none; box-shadow: none; text-decoration-color: var(--lima); }

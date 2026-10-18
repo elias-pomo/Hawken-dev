@@ -1,23 +1,48 @@
 ---
 // Hero: titular tipográfico + celular donde el visitante saca un turno de ejemplo en 3 toques.
 // Los servicios, precios y horarios de la demo son los de Martega's (lun a sáb, 15 a 22 h).
-import Phone from './phone/Phone.astro';
-import { whatsappLink } from '../config/site';
+import { Image } from "astro:assets";
+import fondo from "../assets/fondohero.jpg";
+import Phone from "./phone/Phone.astro";
+import { whatsappLink } from "../config/site";
 ---
 
 <section class="hero wt" aria-labelledby="t-hero">
+  <!-- Fondo decorativo: franjas de marca en las esquinas, centro libre para el texto. Es la imagen más grande de la home, por eso carga primero. -->
+  <Image
+    src={fondo}
+    alt=""
+    aria-hidden="true"
+    class="hero__fondo"
+    widths={[828, 1280, 1844]}
+    sizes="100vw"
+    loading="eager"
+    fetchpriority="high"
+  />
   <div class="wrap">
     <div class="hero__copy">
-      <div class="hero__meta"><span>Tucumán, Argentina</span><span>Online para todo el país</span></div>
+      <div class="hero__meta">
+        <span>Tucumán, Argentina</span><span>Online para todo el país</span>
+      </div>
       <h1 id="t-hero">
         <span class="ln">Tu negocio</span>
         <span class="ln"><span class="hero__hl">atiende</span></span>
         <span class="ln hero__out">aunque vos</span>
         <span class="ln">no estés</span>
       </h1>
-      <p class="lead">Webs, tiendas online y sistemas de <strong>turnos, stock y ventas</strong>. Tus clientes reservan, consultan y compran desde el celular, a cualquier hora.</p>
+      <p class="lead">
+        Webs, tiendas online y sistemas de <strong
+          >turnos, stock y ventas</strong
+        >. Tus clientes reservan, consultan y compran desde el celular, a
+        cualquier hora.
+      </p>
       <div class="btns btns--full">
-        <a class="btn btn--lima" href={whatsappLink()} target="_blank" rel="noopener">Escribime por WhatsApp <span class="arr">↗</span></a>
+        <a
+          class="btn btn--lima"
+          href={whatsappLink()}
+          target="_blank"
+          rel="noopener">Escribime por WhatsApp <span class="arr">↗</span></a
+        >
         <a class="btn btn--ghost" href="#proyectos">Ver proyectos</a>
       </div>
     </div>
@@ -25,11 +50,27 @@ import { whatsappLink } from '../config/site';
     <div class="stage">
       <div class="stage__label">Ejemplo<br />ilustrativo</div>
       <Phone hora="20:30">
-        <div class="phone__screen demo" id="demo" role="group" aria-label="Demo: sacá un turno de ejemplo">
-          <div class="demo__top"><b>Martega's</b><div class="demo__prog"><span class="sr-only">Paso 1 de 3</span><i class="on" aria-hidden="true"></i><i aria-hidden="true"></i><i aria-hidden="true"></i></div></div>
+        <div
+          class="phone__screen demo"
+          id="demo"
+          role="group"
+          aria-label="Demo: sacá un turno de ejemplo"
+        >
+          <div class="demo__top">
+            <b>Martega's</b><div class="demo__prog">
+              <span class="sr-only">Paso 1 de 3</span><i
+                class="on"
+                aria-hidden="true"></i><i aria-hidden="true"></i><i
+                aria-hidden="true"></i>
+            </div>
+          </div>
           <p class="demo__q" tabindex="-1">¿Qué te hacés?</p>
-          <button type="button" class="demo__opt" data-serv="0">Corte<span>$12.000</span></button>
-          <button type="button" class="demo__opt" data-serv="1">Corte y barba<span>$15.000</span></button>
+          <button type="button" class="demo__opt" data-serv="0"
+            >Corte<span>$12.000</span></button
+          >
+          <button type="button" class="demo__opt" data-serv="1"
+            >Corte y barba<span>$15.000</span></button
+          >
           <p class="demo__hint">Sin registrarte. Tocá un servicio.</p>
         </div>
       </Phone>
@@ -39,56 +80,80 @@ import { whatsappLink } from '../config/site';
 </section>
 
 <script>
-  type Estado = { paso: 1 | 2 | 3 | 4; serv: number; hora: string; codigo: string };
+  type Estado = {
+    paso: 1 | 2 | 3 | 4;
+    serv: number;
+    hora: string;
+    codigo: string;
+  };
 
   const servicios = [
-    { nombre: 'Corte', precio: '$12.000' },
-    { nombre: 'Corte y barba', precio: '$15.000' },
+    { nombre: "Corte", precio: "$12.000" },
+    { nombre: "Corte y barba", precio: "$15.000" },
   ];
-  const horas = ['15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00'];
-  const ocupadas = new Set(['16:00', '19:00', '21:00']);
+  const horas = [
+    "15:00",
+    "16:00",
+    "17:00",
+    "18:00",
+    "19:00",
+    "20:00",
+    "21:00",
+    "22:00",
+  ];
+  const ocupadas = new Set(["16:00", "19:00", "21:00"]);
 
-  const scr = document.getElementById('demo');
-  const estado = document.getElementById('demo-estado');
-  let st: Estado = { paso: 1, serv: 0, hora: '', codigo: '' };
+  const scr = document.getElementById("demo");
+  const estado = document.getElementById("demo-estado");
+  let st: Estado = { paso: 1, serv: 0, hora: "", codigo: "" };
 
   const progreso = (n: number) =>
-    `<div class="demo__prog"><span class="sr-only">Paso ${n} de 3</span>${[1, 2, 3]
-      .map((i) => `<i class="${i <= n ? 'on' : ''}" aria-hidden="true"></i>`)
-      .join('')}</div>`;
+    `<div class="demo__prog"><span class="sr-only">Paso ${n} de 3</span>${[
+      1, 2, 3,
+    ]
+      .map((i) => `<i class="${i <= n ? "on" : ""}" aria-hidden="true"></i>`)
+      .join("")}</div>`;
   // Las horas ocupadas no se deshabilitan del todo: así se pueden recorrer con el teclado y se escucha "ocupado".
   const slot = (h: string) =>
     ocupadas.has(h)
       ? `<button type="button" class="demo__slot" aria-disabled="true">${h}<span class="sr-only"> ocupado</span></button>`
       : `<button type="button" class="demo__slot" data-hora="${h}">${h}</button>`;
-  const avisos: Record<Estado['paso'], () => string> = {
-    1: () => 'Paso 1 de 3: elegí un servicio.',
-    2: () => `Paso 2 de 3: elegiste ${servicios[st.serv].nombre}. Elegí un horario.`,
+  const avisos: Record<Estado["paso"], () => string> = {
+    1: () => "Paso 1 de 3: elegí un servicio.",
+    2: () =>
+      `Paso 2 de 3: elegiste ${servicios[st.serv].nombre}. Elegí un horario.`,
     3: () => `Paso 3 de 3: jueves ${st.hora}. Confirmá el turno.`,
-    4: () => `Turno reservado. Tu código es ${st.codigo.split('').join(' ')}.`,
+    4: () => `Turno reservado. Tu código es ${st.codigo.split("").join(" ")}.`,
   };
-  const top = (n: number) => `<div class="demo__top"><b>Martega's</b>${progreso(n)}</div>`;
-  const fila = (a: string, b: string) => `<div class="demo__sum"><span>${a}</span><span>${b}</span></div>`;
+  const top = (n: number) =>
+    `<div class="demo__top"><b>Martega's</b>${progreso(n)}</div>`;
+  const fila = (a: string, b: string) =>
+    `<div class="demo__sum"><span>${a}</span><span>${b}</span></div>`;
 
-  const pantallas: Record<Estado['paso'], () => string> = {
+  const pantallas: Record<Estado["paso"], () => string> = {
     1: () =>
       top(1) +
       '<p class="demo__q" tabindex="-1">¿Qué te hacés?</p>' +
-      servicios.map((s, i) => `<button type="button" class="demo__opt" data-serv="${i}">${s.nombre}<span>${s.precio}</span></button>`).join('') +
+      servicios
+        .map(
+          (s, i) =>
+            `<button type="button" class="demo__opt" data-serv="${i}">${s.nombre}<span>${s.precio}</span></button>`,
+        )
+        .join("") +
       '<p class="demo__hint">Sin registrarte. Tocá un servicio.</p>',
     2: () =>
       top(2) +
       '<p class="demo__q" tabindex="-1">Jueves · ¿a qué hora?</p><div class="demo__slots">' +
-      horas.map(slot).join('') +
-      '</div>' +
+      horas.map(slot).join("") +
+      "</div>" +
       fila(servicios[st.serv].nombre, servicios[st.serv].precio) +
       '<button type="button" class="demo__link" data-ir="1">← Cambiar servicio</button>',
     3: () =>
       top(3) +
       '<p class="demo__q" tabindex="-1">Confirmá tu turno</p>' +
-      fila('Servicio', servicios[st.serv].nombre) +
-      fila('Día y hora', `Jueves ${st.hora}`) +
-      fila('Precio', servicios[st.serv].precio) +
+      fila("Servicio", servicios[st.serv].nombre) +
+      fila("Día y hora", `Jueves ${st.hora}`) +
+      fila("Precio", servicios[st.serv].precio) +
       '<button type="button" class="demo__link" data-ir="2">← Cambiar horario</button>' +
       '<button type="button" class="demo__ok" data-ok>Confirmar turno</button>',
     4: () =>
@@ -96,7 +161,10 @@ import { whatsappLink } from '../config/site';
       '<div class="demo__done"><p class="demo__q" tabindex="-1">¡Turno reservado!</p>' +
       `<p>Jueves ${st.hora} · ${servicios[st.serv].nombre}</p>` +
       '<span class="label">Tu código</span>' +
-      `<div class="demo__code">${st.codigo.split('').map((d) => `<b>${d}</b>`).join('')}</div>` +
+      `<div class="demo__code">${st.codigo
+        .split("")
+        .map((d) => `<b>${d}</b>`)
+        .join("")}</div>` +
       '<p class="demo__hint">Con este código lo buscás o lo cancelás. Así reservan los clientes de Martega\'s.</p></div>' +
       '<button type="button" class="demo__link" data-reiniciar>Probar de nuevo</button>',
   };
@@ -105,77 +173,338 @@ import { whatsappLink } from '../config/site';
   const render = () => {
     if (!scr) return;
     scr.innerHTML = pantallas[st.paso]();
-    scr.querySelector<HTMLElement>('.demo__q')?.focus({ preventScroll: true });
+    scr.querySelector<HTMLElement>(".demo__q")?.focus({ preventScroll: true });
     if (estado) estado.textContent = avisos[st.paso]();
   };
 
-  scr?.addEventListener('click', (e) => {
-    const b = (e.target as HTMLElement).closest('button');
-    if (!b || b.getAttribute('aria-disabled') === 'true') return;
+  scr?.addEventListener("click", (e) => {
+    const b = (e.target as HTMLElement).closest("button");
+    if (!b || b.getAttribute("aria-disabled") === "true") return;
     const d = b.dataset;
     if (d.serv !== undefined) st = { ...st, paso: 2, serv: Number(d.serv) };
     else if (d.hora) st = { ...st, paso: 3, hora: d.hora };
-    else if (d.ir) st = { ...st, paso: Number(d.ir) as Estado['paso'] };
-    else if (d.ok !== undefined) st = { ...st, paso: 4, codigo: String(1000 + Math.floor(Math.random() * 9000)) };
-    else if (d.reiniciar !== undefined) st = { paso: 1, serv: 0, hora: '', codigo: '' };
+    else if (d.ir) st = { ...st, paso: Number(d.ir) as Estado["paso"] };
+    else if (d.ok !== undefined)
+      st = {
+        ...st,
+        paso: 4,
+        codigo: String(1000 + Math.floor(Math.random() * 9000)),
+      };
+    else if (d.reiniciar !== undefined)
+      st = { paso: 1, serv: 0, hora: "", codigo: "" };
     render();
   });
 </script>
 
 <style>
-  .hero { position: relative; overflow: hidden; }
-  .hero .wrap { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--s6); align-items: center; padding-block: var(--s8) var(--s12); }
-  .hero__copy { display: flex; flex-direction: column; gap: var(--s4); min-width: 0; }
-  .hero__meta { display: flex; flex-wrap: wrap; gap: 8px 20px; font-size: 13px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
-  .hero__meta span { display: flex; align-items: center; gap: 8px; }
-  .hero__meta span::before { content: ''; width: 10px; height: 10px; background: var(--violeta); }
-  h1 { font-size: clamp(40px, 6vw, 92px); line-height: 0.92; letter-spacing: -0.035em; }
-  .ln { display: block; }
-  .hero__hl { display: inline-block; margin-left: -0.08em; padding: 0 0.08em; background: var(--lima); box-shadow: inset 0 -0.06em 0 var(--negro); }
+  .hero {
+    position: relative;
+    overflow: hidden;
+    background: var(--fondo-hero);
+  }
+  .hero__fondo {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 50%;
+    pointer-events: none;
+    user-select: none;
+  }
+  /* Laptop chica: el hero es más alto que la foto y se recortan los costados; se prioriza el lado izquierdo. */
+  @media (min-width: 901px) and (max-width: 1279px) {
+    .hero__fondo {
+      object-position: 20% 50%;
+    }
+  }
+  .hero .wrap {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: var(--s6);
+    align-items: center;
+    padding-block: var(--s8) var(--s12);
+  }
+  .hero__copy {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s4);
+    min-width: 0;
+  }
+  .hero__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 20px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .hero__meta span {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .hero__meta span::before {
+    content: "";
+    width: 10px;
+    height: 10px;
+    background: var(--violeta);
+  }
+  h1 {
+    font-size: clamp(40px, 6vw, 92px);
+    line-height: 0.92;
+    letter-spacing: -0.035em;
+  }
+  .ln {
+    display: block;
+  }
+  .hero__hl {
+    display: inline-block;
+    margin-left: -0.08em;
+    padding: 0 0.08em;
+    background: var(--lima);
+    box-shadow: inset 0 -0.06em 0 var(--negro);
+  }
   /* Letra calada: sin espaciado negativo, para que el contorno de una letra no se pise con la siguiente. */
-  .hero__out { color: var(--blanco); -webkit-text-stroke: 3px var(--negro); paint-order: stroke fill; letter-spacing: 0.01em; }
-  .lead { max-width: 46ch; }
-  .lead strong { color: var(--negro); }
+  .hero__out {
+    color: var(--blanco);
+    -webkit-text-stroke: 3px var(--negro);
+    paint-order: stroke fill;
+    letter-spacing: 0.01em;
+  }
+  .lead {
+    max-width: 46ch;
+  }
+  .lead strong {
+    color: var(--negro);
+  }
 
-  .stage { position: relative; justify-self: center; width: min(340px, 100%); padding: 28px 28px 40px 0; }
+  .stage {
+    position: relative;
+    justify-self: center;
+    width: min(340px, 100%);
+    padding: 28px 28px 40px 0;
+  }
   /* La demo tiene poco contenido por paso: un celular más bajo evita el espacio vacío. */
-  .stage :global(.phone) { aspect-ratio: 9 / 14; }
-  .stage::before { content: ''; position: absolute; top: 0; right: 0; width: 78%; height: 82%; background: var(--violeta); }
-  .stage::after { content: 'PROBALO'; position: absolute; right: -6px; bottom: 6px; font-family: var(--display); font-size: 13px; letter-spacing: 0.2em; writing-mode: vertical-rl; transform: rotate(180deg); }
-  .stage__label { position: absolute; z-index: 3; left: -12px; top: 44%; padding: 8px 10px; background: var(--lima); border: var(--stroke) solid var(--negro); box-shadow: 4px 4px 0 var(--negro); font-size: 12px; font-weight: 700; letter-spacing: 0.1em; line-height: 1.25; text-transform: uppercase; }
+  .stage :global(.phone) {
+    aspect-ratio: 9 / 14;
+  }
+  .stage::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 78%;
+    height: 82%;
+    background: var(--violeta);
+  }
+  .stage::after {
+    content: "PROBALO";
+    position: absolute;
+    right: -6px;
+    bottom: 6px;
+    font-family: var(--display);
+    font-size: 13px;
+    letter-spacing: 0.2em;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+  }
+  .stage__label {
+    position: absolute;
+    z-index: 3;
+    left: -12px;
+    top: 44%;
+    padding: 8px 10px;
+    background: var(--lima);
+    border: var(--stroke) solid var(--negro);
+    box-shadow: 4px 4px 0 var(--negro);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    line-height: 1.25;
+    text-transform: uppercase;
+  }
 
   @media (max-width: 900px) {
-    .hero .wrap { grid-template-columns: 1fr; padding-block: var(--s6) var(--s8); }
-    .stage { margin-top: var(--s2); width: min(300px, 100%); }
-    .stage { padding-top: 60px; }
-    .stage__label { left: 0; top: 0; }
+    /* En una columna el hero es alto y angosto: estirada a lo alto, la foto cruzaría las franjas sobre el texto.
+       Va solo en la mitad de abajo, detrás de la demo, mostrando su borde izquierdo (donde están las franjas). */
+    .hero__fondo {
+      inset: auto 0 0 0;
+      height: 50%;
+      object-position: 0% 100%;
+    }
+    .hero .wrap {
+      grid-template-columns: 1fr;
+      padding-block: var(--s6) var(--s8);
+    }
+    .stage {
+      margin-top: var(--s2);
+      width: min(300px, 100%);
+    }
+    .stage {
+      padding-top: 60px;
+    }
+    .stage__label {
+      left: 0;
+      top: 0;
+    }
   }
-  @media (max-width: 420px) { .hero__out { -webkit-text-stroke-width: 2px; } }
+  @media (max-width: 420px) {
+    .hero__out {
+      -webkit-text-stroke-width: 2px;
+    }
+  }
 </style>
 
 <!-- La demo se redibuja con JS: sus estilos son globales, con el prefijo .demo. -->
 <style is:global>
-  .demo__top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
-  .demo__top b { font-family: var(--display); font-size: 15px; text-transform: uppercase; }
-  .demo__top .label { font-size: 11px; }
-  .demo__prog { display: flex; gap: 4px; }
-  .demo__prog i { width: 18px; height: 6px; background: var(--linea-clara); }
-  .demo__prog i.on { background: var(--negro); }
-  .demo__q { font-family: var(--display); font-size: 20px; line-height: 1.05; text-transform: uppercase; }
-  .demo__opt { display: flex; justify-content: space-between; align-items: center; gap: 8px; width: 100%; min-height: 52px; padding: 10px 12px;
-    background: var(--blanco); color: var(--negro); border: 2px solid var(--negro); font-weight: 700; font-size: 14px; text-align: left; cursor: pointer; }
-  .demo__opt span { font-weight: 500; font-variant-numeric: tabular-nums; }
-  .demo__opt:hover, .demo__slot:hover:not([aria-disabled]) { background: var(--lima-suave); }
-  .demo__q:focus { outline: none; }
-  .demo__slots { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
-  .demo__slot { min-height: 46px; background: var(--blanco); color: var(--negro); border: 2px solid var(--negro); font-weight: 700; font-size: 14px; font-variant-numeric: tabular-nums; cursor: pointer; }
-  .demo__slot[aria-disabled] { border-style: dashed; border-color: #BDBDBD; color: #767676; text-decoration: line-through; cursor: not-allowed; }
-  .demo__sum { display: flex; justify-content: space-between; gap: 8px; padding-top: 10px; border-top: 2px solid var(--negro); font-size: 13px; font-variant-numeric: tabular-nums; }
-  .demo__ok { margin-top: auto; min-height: 50px; border: 0; background: var(--negro); color: var(--lima); font-weight: 700; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; }
-  .demo__link { width: fit-content; min-height: 44px; padding: 6px 0; background: none; border: 0; color: var(--negro); font-weight: 700; font-size: 13px; text-decoration: underline; text-underline-offset: 4px; cursor: pointer; }
-  .demo__hint { margin-top: auto; font-size: 12px; color: var(--gris-claro); }
-  .demo__done { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 12px; }
-  .demo__done .demo__hint { margin-top: 0; }
-  .demo__code { display: flex; gap: 6px; }
-  .demo__code b { width: 46px; height: 58px; display: grid; place-items: center; border: 2px solid var(--negro); background: var(--lima); font-family: var(--display); font-size: 26px; font-variant-numeric: tabular-nums; }
+  .demo__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+  }
+  .demo__top b {
+    font-family: var(--display);
+    font-size: 15px;
+    text-transform: uppercase;
+  }
+  .demo__top .label {
+    font-size: 11px;
+  }
+  .demo__prog {
+    display: flex;
+    gap: 4px;
+  }
+  .demo__prog i {
+    width: 18px;
+    height: 6px;
+    background: var(--linea-clara);
+  }
+  .demo__prog i.on {
+    background: var(--negro);
+  }
+  .demo__q {
+    font-family: var(--display);
+    font-size: 20px;
+    line-height: 1.05;
+    text-transform: uppercase;
+  }
+  .demo__opt {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    min-height: 52px;
+    padding: 10px 12px;
+    background: var(--blanco);
+    color: var(--negro);
+    border: 2px solid var(--negro);
+    font-weight: 700;
+    font-size: 14px;
+    text-align: left;
+    cursor: pointer;
+  }
+  .demo__opt span {
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+  }
+  .demo__opt:hover,
+  .demo__slot:hover:not([aria-disabled]) {
+    background: var(--lima-suave);
+  }
+  .demo__q:focus {
+    outline: none;
+  }
+  .demo__slots {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 6px;
+  }
+  .demo__slot {
+    min-height: 46px;
+    background: var(--blanco);
+    color: var(--negro);
+    border: 2px solid var(--negro);
+    font-weight: 700;
+    font-size: 14px;
+    font-variant-numeric: tabular-nums;
+    cursor: pointer;
+  }
+  .demo__slot[aria-disabled] {
+    border-style: dashed;
+    border-color: #bdbdbd;
+    color: #767676;
+    text-decoration: line-through;
+    cursor: not-allowed;
+  }
+  .demo__sum {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    padding-top: 10px;
+    border-top: 2px solid var(--negro);
+    font-size: 13px;
+    font-variant-numeric: tabular-nums;
+  }
+  .demo__ok {
+    margin-top: auto;
+    min-height: 50px;
+    border: 0;
+    background: var(--negro);
+    color: var(--lima);
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  .demo__link {
+    width: fit-content;
+    min-height: 44px;
+    padding: 6px 0;
+    background: none;
+    border: 0;
+    color: var(--negro);
+    font-weight: 700;
+    font-size: 13px;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    cursor: pointer;
+  }
+  .demo__hint {
+    margin-top: auto;
+    font-size: 12px;
+    color: var(--gris-claro);
+  }
+  .demo__done {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 12px;
+  }
+  .demo__done .demo__hint {
+    margin-top: 0;
+  }
+  .demo__code {
+    display: flex;
+    gap: 6px;
+  }
+  .demo__code b {
+    width: 46px;
+    height: 58px;
+    display: grid;
+    place-items: center;
+    border: 2px solid var(--negro);
+    background: var(--lima);
+    font-family: var(--display);
+    font-size: 26px;
+    font-variant-numeric: tabular-nums;
+  }
 </style>

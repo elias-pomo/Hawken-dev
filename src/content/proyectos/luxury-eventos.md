@@ -52,10 +52,9 @@ caso:
     - { imagen: ../../assets/proyectos/luxury2.jpg, texto: Qué incluye el salón }
   stack: [React 19, Vite, Tailwind 4, Motion]
   testimonio:
-    texto: "Pedirle a Fernanda una frase sobre cómo le cambió el trabajo (con permiso para publicarla)"
+    texto: "Ahora me ahorro mucho más tiempo en cerrar los eventos, y para mis clientes es más cómodo ver los servicios."
     autor: "Fernanda Rechi"
     rol: "Dueña de Luxury Eventos"
-    pendiente: true
 
 links:
   instagram: https://instagram.com/luxuryeventosarf

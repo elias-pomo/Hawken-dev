@@ -31,7 +31,7 @@ Landing y portafolio de **Hawken | Webs y sistemas** (Elias). Astro 7, sin Tailw
 **Hecho**
 - La home, las 3 páginas de caso y la 404 están armadas según la maqueta v2.
 - Capturas reales en las tarjetas, el hero de cada caso y la galería. La foto de Elias va en "Sobre mí".
-- Imagen para compartir: `public/og.png` (1200×630). Se publica solo si está `SITE_URL` definido (ver `astro.config.mjs`).
+- Imagen para compartir: `public/og.png` (1200×630), con URL completa a `https://hawkendev.com`.
 - Origen en WhatsApp: con `?ref=ig`, `?ref=wa`, `?ref=qr` o `?ref=google`, el mensaje precargado dice de dónde viene la persona (`src/scripts/origen.ts`).
 - Botón de WhatsApp fijo en el celular (`WhatsAppFlotante.astro`).
 - "Siguiente proyecto" al final de cada caso, y lugar para el testimonio (`caso.testimonio`, con `pendiente: true` mientras no haya una frase real).
@@ -40,7 +40,7 @@ Landing y portafolio de **Hawken | Webs y sistemas** (Elias). Astro 7, sin Tailw
 - Demo del hero accesible: anuncia cada paso, mueve el foco y las horas ocupadas se escuchan como "ocupado".
 
 **Falta**
-1. Deploy en Cloudflare Pages (build `npm run build`, salida `dist`) con la variable `SITE_URL` = dominio.
+1. Deploy en Cloudflare Pages (build `npm run build`, salida `dist`). Dominio: `hawkendev.com`, ya fijado en `astro.config.mjs`; Node 22 en `.node-version`.
 2. Activar Web Analytics en el panel de Cloudflare Pages (no requiere código).
 3. Frases reales de Martín y Fernanda para el testimonio. Confirmar el "antes" de Martega's.
 4. Capturas de Luxury y Box Club en mayor resolución (miden ~330 px de ancho y en pantallas 2x se ven blandas).

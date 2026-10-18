@@ -11,6 +11,7 @@
   --linea-clara: #E6E6E6;
   --linea-oscura: #2A2A2A;
   --lima-suave: #F4FBD9;    /* hover de opciones sobre blanco */
+  --fondo-hero: #F6F6F6;    /* el gris claro de la foto del hero (src/assets/fondohero.jpg), para que no se note el corte */
 
   --display: 'Archivo Black', 'Arial Black', Impact, sans-serif;
   --sans: 'Space Grotesk', 'Helvetica Neue', Arial, sans-serif;
