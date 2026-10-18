@@ -1,6 +1,6 @@
 // Si la visita llega con ?ref=..., el mensaje de WhatsApp dice de dónde viene la persona.
 // Así Elias sabe qué canal trae consultas sin usar cookies ni herramientas de seguimiento.
-// Uso: link de la bio de Instagram → https://www.hawkendev.com/?ref=ig ; mensajes de prospección → ?ref=wa
+// Uso: link de la bio de Instagram → https://hawkendev.com/?ref=ig ; mensajes de prospección → ?ref=wa
 
 const FRASES: Record<string, string> = {
   ig: 'te encontré por Instagram',

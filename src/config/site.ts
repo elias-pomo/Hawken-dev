@@ -12,7 +12,7 @@ export const site = {
   city: 'San Miguel de Tucumán',
   region: 'Tucumán',
   country: 'AR',
-  siteUrl: 'https://www.hawkendev.com/',
+  siteUrl: 'https://hawkendev.com/',
   instagram: 'https://www.instagram.com/hawken.dev',
   instagramHandle: '@hawken.dev',
   whatsappDisplay: '+54 9 381 301-0829',
