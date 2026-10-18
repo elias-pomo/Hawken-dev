@@ -53,6 +53,7 @@ caso:
   capturas:
     - { imagen: ../../assets/proyectos/martega2.jpeg, texto: 1 · Elegir servicio }
     - { imagen: ../../assets/proyectos/martega3.jpeg, texto: 2 · Elegir horario }
+    - { imagen: ../../assets/proyectos/martega7.jpeg, texto: Turno especial }
     - { imagen: ../../assets/proyectos/martega6.jpeg, texto: Panel del barbero }
   stack: [Next.js 16, TypeScript, PostgreSQL, Prisma, PWA, Notificaciones push]
   testimonio:

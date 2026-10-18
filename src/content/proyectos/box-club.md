@@ -9,7 +9,7 @@ placa: violeta
 captura: ../../assets/proyectos/boxeo4.jpg
 datos:
   - { valor: 22 clases, texto: por semana en la demo }
-  - { valor: 5 disciplinas, texto: con su foto y su sala }
+  - { valor: 4 salas, texto: "y 5 disciplinas, cada una con su foto" }
   - { valor: 3 roles, texto: "alumno, profe y admin" }
 
 caso:
@@ -38,7 +38,6 @@ caso:
     - { imagen: ../../assets/proyectos/boxeo3.jpg, texto: Disciplinas }
     - { imagen: ../../assets/proyectos/boxeo6.jpg, texto: Mis reservas }
     - { imagen: ../../assets/proyectos/boxeo7.jpg, texto: Panel de clases }
-    - { imagen: ../../assets/proyectos/boxeo1.jpg, texto: Ingreso de socios }
   stack: [Node.js, Express, MongoDB, Handlebars, JWT]
 
 links: {}

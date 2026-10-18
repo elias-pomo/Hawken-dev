@@ -26,6 +26,8 @@ const visibles = preguntas.filter((p) => !p.pendiente || import.meta.env.DEV);
 
 <style>
   .faq-grid { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: var(--s6); }
+  /* El título va en la columna angosta: más chico que el resto de los h2 para que "PREGUNTAN" entre. */
+  .faq-grid h2 { font-size: clamp(34px, 3.4vw, 48px); }
   .faq { border-top: var(--stroke) solid var(--edge); }
   details { border-bottom: 2px solid var(--rule); }
   summary { display: flex; justify-content: space-between; align-items: center; gap: 16px; min-height: 44px; padding: 24px 0; list-style: none; cursor: pointer; font-weight: 700; font-size: clamp(18px, 2vw, 22px); }
@@ -35,5 +37,5 @@ const visibles = preguntas.filter((p) => !p.pendiente || import.meta.env.DEV);
   details[open] summary::after { background: linear-gradient(var(--lima), var(--lima)) center / 100% 4px no-repeat; }
   details p { padding-bottom: 24px; color: var(--muted); }
   details p.pendiente { color: var(--vtext); }
-  @media (max-width: 900px) { .faq-grid { grid-template-columns: 1fr; } }
+  @media (max-width: 900px) { .faq-grid { grid-template-columns: 1fr; } .faq-grid h2 { font-size: clamp(34px, 5.6vw, 72px); } }
 </style>

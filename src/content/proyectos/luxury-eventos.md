@@ -50,7 +50,6 @@ caso:
     - { imagen: ../../assets/proyectos/luxury6.jpg, texto: 2 · Fecha e invitados }
     - { imagen: ../../assets/proyectos/luxury7.jpg, texto: 3 · Presupuesto listo }
     - { imagen: ../../assets/proyectos/luxury2.jpg, texto: Qué incluye el salón }
-    - { imagen: ../../assets/proyectos/luxury4.jpg, texto: Galería de eventos }
   stack: [React 19, Vite, Tailwind 4, Motion]
   testimonio:
     texto: "Pedirle a Fernanda una frase sobre cómo le cambió el trabajo (con permiso para publicarla)"

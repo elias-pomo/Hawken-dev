@@ -41,6 +41,8 @@ const [primera, ...resto] = nombre.split(' ');
 
 <style>
   .proj { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: var(--s6); align-items: center; padding-block: var(--s8); border-bottom: var(--stroke) solid var(--edge); }
+  /* Fila invertida: el celular pasa a la derecha y el texto conserva la columna ancha (7/12). */
+  .proj--rev { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); }
   .proj--rev .proj__vis { order: 2; }
   .proj__vis { position: relative; display: flex; justify-content: center; min-width: 0; padding: 24px 24px 24px 0; }
   .proj__vis::before { content: ''; position: absolute; inset: 0 0 18% 22%; background: var(--placa); }
@@ -53,12 +55,15 @@ const [primera, ...resto] = nombre.split(' ');
   .facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 0; border-top: 2px solid var(--edge); }
   .facts div { display: flex; flex-direction: column; gap: 4px; min-width: 0; padding: 14px 16px 0 0; }
   .facts div + div { padding-left: 16px; border-left: 2px solid var(--rule); }
-  dt { font-family: var(--display); font-size: clamp(20px, 2.4vw, 28px); line-height: 1; text-transform: uppercase; font-variant-numeric: tabular-nums; }
+  /* Tamaño pensado para que cada dato ("1 MENSAJE", "22 CLASES") entre en su tercio sin partirse. */
+  dt { font-family: var(--display); font-size: clamp(18px, 1.6vw, 20px); line-height: 1.05; text-transform: uppercase; font-variant-numeric: tabular-nums; white-space: nowrap; }
   dd { margin: 0; font-size: 13px; line-height: 1.3; color: var(--muted); }
 
   @media (max-width: 900px) {
-    .proj { grid-template-columns: 1fr; gap: var(--s4); padding-block: var(--s6); }
+    .proj, .proj--rev { grid-template-columns: 1fr; gap: var(--s4); padding-block: var(--s6); }
     .proj--rev .proj__vis { order: 0; }
+    /* En una columna, la placa acompaña al celular en vez de ocupar todo el ancho. */
+    .proj__vis { width: min(340px, 100%); justify-self: center; }
   }
   @media (max-width: 520px) {
     .facts { grid-template-columns: 1fr; }
