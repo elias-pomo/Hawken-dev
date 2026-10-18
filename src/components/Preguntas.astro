@@ -1,0 +1,39 @@
+---
+// Preguntas frecuentes en acordeón nativo (<details>), sin JS.
+// Las que tienen respuesta pendiente solo se ven en desarrollo.
+import Kicker from './Kicker.astro';
+import { preguntas } from '../config/home';
+
+const visibles = preguntas.filter((p) => !p.pendiente || import.meta.env.DEV);
+---
+
+<section class="section bk" id="preguntas" aria-labelledby="t-faq">
+  <div class="wrap">
+    <Kicker numero="05" texto="Preguntas" />
+    <div class="faq-grid">
+      <h2 id="t-faq">Lo que más<br />me preguntan</h2>
+      <div class="faq">
+        {visibles.map((p) => (
+          <details>
+            <summary>{p.pregunta}</summary>
+            <p class:list={{ pendiente: p.pendiente }}>{p.respuesta}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .faq-grid { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: var(--s6); }
+  .faq { border-top: var(--stroke) solid var(--edge); }
+  details { border-bottom: 2px solid var(--rule); }
+  summary { display: flex; justify-content: space-between; align-items: center; gap: 16px; min-height: 44px; padding: 24px 0; list-style: none; cursor: pointer; font-weight: 700; font-size: clamp(18px, 2vw, 22px); }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: ''; flex: none; width: 18px; height: 18px;
+    background: linear-gradient(var(--lima), var(--lima)) center / 100% 4px no-repeat, linear-gradient(var(--lima), var(--lima)) center / 4px 100% no-repeat; }
+  details[open] summary::after { background: linear-gradient(var(--lima), var(--lima)) center / 100% 4px no-repeat; }
+  details p { padding-bottom: 24px; color: var(--muted); }
+  details p.pendiente { color: var(--vtext); }
+  @media (max-width: 900px) { .faq-grid { grid-template-columns: 1fr; } }
+</style>

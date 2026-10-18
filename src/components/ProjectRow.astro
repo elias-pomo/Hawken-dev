@@ -1,0 +1,70 @@
+---
+// Fila de proyecto en la home: pantalla sobre una placa de color + datos concretos + links.
+import type { CollectionEntry } from 'astro:content';
+import Phone from './phone/Phone.astro';
+import Tag from './Tag.astro';
+
+interface Props {
+  proyecto: CollectionEntry<'proyectos'>;
+  invertida?: boolean;
+}
+
+const { proyecto, invertida = false } = Astro.props;
+const { nombre, etiqueta, rubro, resumen, placa, pantalla, datos, links } = proyecto.data;
+const href = `/proyectos/${proyecto.id}/`;
+const [primera, ...resto] = nombre.split(' ');
+---
+
+<article class:list={['proj', { 'proj--rev': invertida }]}>
+  <div class="proj__vis" style={`--placa: var(--${placa})`}>
+    <Phone pantalla={pantalla} hora="20:30" class="proj__phone" />
+    <span class="proj__ilus">Ilustración</span>
+  </div>
+  <div class="proj__body">
+    <div class="proj__top"><Tag etiqueta={etiqueta} /><span class="proj__rubro">{rubro}</span></div>
+    <h3>{primera}<br />{resto.join(' ')}</h3>
+    <p class="lead">{resumen}</p>
+    <dl class="facts">
+      {datos.map((d) => (
+        <div><dt>{d.valor}</dt><dd>{d.texto}</dd></div>
+      ))}
+    </dl>
+    <div class="btns">
+      <a class="btn btn--lima btn--sm" href={href}>Ver el caso <span class="arr">→</span></a>
+      {links.demo
+        ? <a class="btn btn--ghost btn--sm" href={links.demo} target="_blank" rel="noopener">Probar la demo ↗</a>
+        : links.vivo
+          ? <a class="btn btn--ghost btn--sm" href={href + '#links'}>Verlo funcionando</a>
+          : <span class="btn btn--sm" aria-disabled="true">{etiqueta === 'demo' ? 'Demo' : 'Web'}: próximamente</span>}
+    </div>
+  </div>
+</article>
+
+<style>
+  .proj { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: var(--s6); align-items: center; padding-block: var(--s8); border-bottom: var(--stroke) solid var(--edge); }
+  .proj--rev .proj__vis { order: 2; }
+  .proj__vis { position: relative; display: flex; justify-content: center; min-width: 0; padding: 24px 24px 24px 0; }
+  .proj__vis::before { content: ''; position: absolute; inset: 0 0 18% 22%; background: var(--placa); }
+  .proj__vis :global(.proj__phone) { width: min(250px, 100%); }
+  .proj__ilus { position: absolute; z-index: 3; left: 0; bottom: 4px; padding: 4px 8px; background: var(--bg); color: var(--fg); box-shadow: inset 0 0 0 2px var(--edge); font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; }
+  .proj__body { display: flex; flex-direction: column; gap: var(--s3); min-width: 0; }
+  .proj__top { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+  .proj__rubro { font-size: 13px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+  h3 { font-size: clamp(34px, 5vw, 60px); line-height: 0.92; letter-spacing: -0.02em; }
+  .lead { max-width: 48ch; }
+  .facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 0; border-top: 2px solid var(--edge); }
+  .facts div { display: flex; flex-direction: column; gap: 4px; min-width: 0; padding: 14px 16px 0 0; }
+  .facts div + div { padding-left: 16px; border-left: 2px solid var(--rule); }
+  dt { font-family: var(--display); font-size: clamp(20px, 2.4vw, 28px); line-height: 1; text-transform: uppercase; font-variant-numeric: tabular-nums; }
+  dd { margin: 0; font-size: 13px; line-height: 1.3; color: var(--muted); }
+
+  @media (max-width: 900px) {
+    .proj { grid-template-columns: 1fr; gap: var(--s4); padding-block: var(--s6); }
+    .proj--rev .proj__vis { order: 0; }
+  }
+  @media (max-width: 520px) {
+    .facts { grid-template-columns: 1fr; }
+    .facts div { padding-bottom: 12px; }
+    .facts div + div { padding-left: 0; padding-top: 12px; border-left: 0; border-top: 2px solid var(--rule); }
+  }
+</style>

@@ -1,0 +1,18 @@
+---
+// Marco de celular. Sin `pantalla`, muestra lo que se le pase como contenido (la demo del hero).
+import Screen, { type Pantalla } from './Screen.astro';
+
+interface Props {
+  pantalla?: Pantalla;
+  hora?: string;
+  class?: string;
+  id?: string;
+}
+
+const { pantalla, hora = '', class: className, id } = Astro.props;
+---
+
+<div class:list={['phone', className]} id={id}>
+  <div class="phone__notch" aria-hidden="true"><span>{hora}</span><i></i><span></span></div>
+  {pantalla ? <Screen pantalla={pantalla} /> : <slot />}
+</div>

@@ -1,0 +1,12 @@
+---
+// Etiqueta de un trabajo: "Caso real" (cliente) o "Proyecto demo".
+interface Props {
+  etiqueta: 'caso-real' | 'demo';
+}
+
+const { etiqueta } = Astro.props;
+---
+
+{etiqueta === 'caso-real'
+  ? <span class="tag"><span class="tag__dot"></span>Caso real</span>
+  : <span class="tag tag--demo">Proyecto demo</span>}

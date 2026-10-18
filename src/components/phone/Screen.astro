@@ -1,0 +1,88 @@
+---
+// Pantallas ilustrativas dibujadas en CSS. Se reemplazan por capturas reales cuando estén.
+// Los datos salen de cada proyecto (precios de Martega's, ejemplo del cotizador de Luxury, grilla de Box Club).
+export type Pantalla = 'turnos' | 'cotizador' | 'clases' | 'panel' | 'servicio' | 'horario' | 'codigo';
+
+interface Props {
+  pantalla: Pantalla;
+}
+
+const { pantalla } = Astro.props;
+---
+
+<div class="phone__screen mini" aria-hidden="true">
+  {pantalla === 'turnos' && (
+    <>
+      <span class="mini__h">Martega's · Turnos</span>
+      <div class="mini__row"><span>Corte</span><span>$12.000</span></div>
+      <div class="mini__row mini__row--on"><span>Corte y barba</span><span>$15.000</span></div>
+      <strong>Jueves</strong>
+      <div class="mini__week" style="grid-template-columns:repeat(3,1fr)">
+        <i class="x"></i><i class="a"></i><i></i><i></i><i class="x"></i><i></i>
+      </div>
+      <div class="mini__total"><span>Tu código</span><b>4 8 2 1</b></div>
+    </>
+  )}
+
+  {pantalla === 'cotizador' && (
+    <>
+      <span class="mini__h">Armá tu evento</span>
+      <div class="mini__row mini__row--on"><span>15 años · Premium</span><span>✓</span></div>
+      <strong>Invitados: 90</strong>
+      <div class="mini__bar"><i style="width:90%"></i></div>
+      <div class="mini__row mini__row--on"><span>DJ</span><span>✓</span></div>
+      <div class="mini__row mini__row--on"><span>Candy bar Premium</span><span>✓</span></div>
+      <div class="mini__total"><span>Total estimado</span><b>$950.000</b></div>
+    </>
+  )}
+
+  {pantalla === 'clases' && (
+    <>
+      <span class="mini__h">Clases de la semana</span>
+      <div class="mini__week">
+        <b>L</b><b>M</b><b>M</b><b>J</b><b>V</b><b>S</b>
+        <i class="a"></i><i></i><i class="v"></i><i class="a"></i><i></i><i class="x"></i>
+        <i></i><i class="v"></i><i></i><i></i><i class="a"></i><i></i>
+        <i class="a"></i><i></i><i class="a"></i><i class="v"></i><i></i><i class="x"></i>
+      </div>
+      <div class="mini__row mini__row--on"><span>Boxeo · 19:00</span><span>4 lugares</span></div>
+      <div class="mini__row"><span>MMA · 20:00</span><span>1 lugar</span></div>
+      <div class="mini__row mini__row--off"><span>Funcional · 21:00</span><span>Completa</span></div>
+    </>
+  )}
+
+  {pantalla === 'panel' && (
+    <>
+      <span class="mini__h">Panel · Hoy</span>
+      <div class="mini__row mini__row--on"><span>15:00 · Corte y barba</span><span>Nuevo</span></div>
+      <div class="mini__row"><span>16:00 · Corte</span><span>4821</span></div>
+      <div class="mini__row mini__row--off"><span>17:00 · Libre</span><span></span></div>
+      <div class="mini__row"><span>18:00 · Corte</span><span>3307</span></div>
+      <div class="mini__total"><span>Turnos de hoy</span><b>3</b></div>
+    </>
+  )}
+
+  {pantalla === 'servicio' && (
+    <>
+      <span class="mini__h">Paso 1</span>
+      <div class="mini__row mini__row--on"><span>Corte y barba</span><span>$15.000</span></div>
+      <div class="mini__row"><span>Corte</span><span>$12.000</span></div>
+    </>
+  )}
+
+  {pantalla === 'horario' && (
+    <>
+      <span class="mini__h">Elegí el día</span>
+      <div class="mini__week" style="grid-template-columns:repeat(3,1fr)">
+        <i class="x"></i><i class="a"></i><i></i><i></i><i class="x"></i><i></i><i></i><i></i><i class="x"></i>
+      </div>
+    </>
+  )}
+
+  {pantalla === 'codigo' && (
+    <>
+      <span class="mini__h">Listo</span>
+      <div class="mini__total"><span>Tu código</span><b>4 8 2 1</b></div>
+    </>
+  )}
+</div>

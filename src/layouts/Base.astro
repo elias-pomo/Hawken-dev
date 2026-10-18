@@ -1,0 +1,109 @@
+---
+// Layout de todas las páginas: SEO, fuentes locales, header y footer.
+import '@fontsource/archivo-black/latin-400.css';
+import '@fontsource/space-grotesk/latin-400.css';
+import '@fontsource/space-grotesk/latin-500.css';
+import '@fontsource/space-grotesk/latin-700.css';
+import '../styles/global.css';
+import { site, whatsappLink, navLinks } from '../config/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title = site.title, description = site.description } = Astro.props;
+const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : undefined;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfessionalService',
+  name: `${site.name} | ${site.tagline}`,
+  description: site.description,
+  founder: site.owner,
+  areaServed: 'AR',
+  address: { '@type': 'PostalAddress', addressLocality: site.city, addressRegion: site.region, addressCountry: site.country },
+  sameAs: [site.instagram],
+};
+---
+
+<!doctype html>
+<html lang="es-AR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    {canonical && <link rel="canonical" href={canonical} />}
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="theme-color" content="#0A0A0A" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_AR" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    {canonical && <meta property="og:url" content={canonical} />}
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </head>
+  <body>
+    <header class="site-head wt">
+      <div class="wrap">
+        <a class="logo" href="/" aria-label="Hawken, inicio">
+          <img src="/favicon.svg" alt="" width="38" height="38" />
+          HAWKEN <small>WEBS Y SISTEMAS</small>
+        </a>
+        <nav class="site-nav" aria-label="Principal">
+          {navLinks.map((l) => <a class="lnk" href={l.href}>{l.label}</a>)}
+          <a class="btn btn--lima btn--sm" href={whatsappLink()} target="_blank" rel="noopener">WhatsApp <span class="arr">↗</span></a>
+        </nav>
+        <details class="menu">
+          <summary aria-label="Abrir menú">MENÚ</summary>
+          <div class="menu-panel">
+            {navLinks.map((l) => <a class="big" href={l.href}>{l.label}</a>)}
+            <a class="btn btn--lima" href={whatsappLink()} target="_blank" rel="noopener">Escribime por WhatsApp</a>
+          </div>
+        </details>
+      </div>
+    </header>
+
+    <slot />
+
+    <footer class="foot bk">
+      <div class="wrap">
+        <span>© {new Date().getFullYear()} Hawken · Webs y sistemas · Tucumán</span>
+        <a href={site.instagram} target="_blank" rel="noopener">Instagram ↗</a>
+      </div>
+    </footer>
+
+    <script>
+      // Cierra el menú mobile al tocar un link.
+      document.querySelectorAll<HTMLAnchorElement>('.menu-panel a').forEach((a) =>
+        a.addEventListener('click', () => a.closest('details')?.removeAttribute('open')),
+      );
+    </script>
+  </body>
+</html>
+
+<style>
+  .site-head { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; border-bottom: var(--stroke) solid var(--negro); }
+  .site-head .wrap { position: relative; display: flex; align-items: center; gap: var(--s3); min-height: 72px; }
+  .logo { display: flex; align-items: center; gap: 12px; text-decoration: none; font-family: var(--display); font-size: 22px; letter-spacing: 0.02em; }
+  .logo img { flex: none; }
+  .logo small { font-family: var(--sans); font-size: 12px; font-weight: 700; letter-spacing: 0.12em; color: var(--gris-claro); border-left: 2px solid var(--negro); padding-left: 12px; }
+  .site-nav { display: flex; gap: var(--s4); margin-left: auto; align-items: center; }
+  .lnk { font-weight: 700; text-decoration: none; font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; padding: 8px 0;
+    background: linear-gradient(var(--lima), var(--lima)) 0 100% / 0 6px no-repeat; transition: background-size 0.2s; }
+  .lnk:hover { background-size: 100% 6px; }
+  .menu { display: none; margin-left: auto; }
+  .menu summary { list-style: none; cursor: pointer; height: 46px; padding: 0 14px; display: grid; place-items: center;
+    border: var(--stroke) solid var(--negro); font-weight: 700; font-size: 13px; letter-spacing: 0.12em; }
+  .menu summary::-webkit-details-marker { display: none; }
+  .menu[open] summary { background: var(--negro); color: var(--blanco); }
+  .menu-panel { position: absolute; left: 0; right: 0; top: 100%; display: flex; flex-direction: column; background: var(--negro); color: var(--blanco);
+    padding: 8px max(16px, env(safe-area-inset-right, 0px)) 24px max(16px, env(safe-area-inset-left, 0px)); }
+  .menu-panel .big { font-family: var(--display); font-size: 34px; text-transform: uppercase; text-decoration: none; padding: 12px 0; border-bottom: 2px solid var(--linea-oscura); }
+  .menu-panel .btn { margin-top: var(--s3); }
+  @media (max-width: 900px) { .site-nav { display: none; } .menu { display: block; } .logo small { display: none; } }
+
+  .foot .wrap { display: flex; flex-wrap: wrap; gap: var(--s2) var(--s4); justify-content: space-between; align-items: center; padding-block: var(--s4); font-size: 14px; color: var(--muted); }
+  .foot a { font-weight: 700; color: var(--fg); text-decoration: none; letter-spacing: 0.08em; text-transform: uppercase; font-size: 13px; }
+</style>

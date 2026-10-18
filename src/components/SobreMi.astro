@@ -1,0 +1,39 @@
+---
+// Presentación de Elias. La foto real todavía falta: mientras tanto se ve un hueco rayado.
+import Kicker from './Kicker.astro';
+import { site } from '../config/site';
+---
+
+<section class="section wt" id="sobre-mi" aria-labelledby="t-sobre">
+  <div class="wrap">
+    <Kicker numero="04" texto="Quién lo hace" />
+    <div class="about">
+      <div class="about__foto">
+        <!-- TODO: reemplazar por una foto real de Elias (src/assets/elias.jpg con <Image />). -->
+        <div class="about__hueco" role="img" aria-label="Foto de Elias (próximamente)">Foto de Elias</div>
+      </div>
+      <div class="about__body">
+        <h2 id="t-sobre">Hablás directo con quien <span class="hl">arma</span> tu sistema</h2>
+        <p class="lead">Soy Elias, desarrollador full stack en Tucumán. Hawken soy yo. Empiezo por entender cómo trabaja tu negocio y después elijo la tecnología. Todo lo que ves en Proyectos lo hice yo.</p>
+        <div class="about__firma">
+          <b>{site.owner}</b><span>Fundador de Hawken</span>
+          <a class="btn btn--ghost btn--sm" href={site.instagram} target="_blank" rel="noopener">{site.instagramHandle} ↗</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: var(--s8); align-items: center; }
+  .about__foto { position: relative; width: 100%; max-width: 420px; padding: 0 24px 24px 0; }
+  .about__foto::before { content: ''; position: absolute; inset: 24px 0 0 24px; background: var(--lima); border: var(--stroke) solid var(--negro); }
+  .about__hueco { position: relative; aspect-ratio: 4 / 5; display: grid; place-items: center; padding: 16px; border: var(--stroke) solid var(--negro);
+    background: repeating-linear-gradient(45deg, #F2F2F2 0 12px, var(--blanco) 12px 24px); font-size: 13px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; }
+  .about__body { display: flex; flex-direction: column; gap: var(--s3); min-width: 0; }
+  h2 { font-size: clamp(28px, 3.8vw, 46px); line-height: 1; letter-spacing: -0.015em; }
+  .about__firma { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; padding-top: var(--s2); border-top: 2px solid var(--negro); }
+  .about__firma b { font-size: 18px; }
+  .about__firma span { font-size: 15px; color: var(--gris-claro); }
+  @media (max-width: 900px) { .about { grid-template-columns: 1fr; gap: var(--s6); } }
+</style>

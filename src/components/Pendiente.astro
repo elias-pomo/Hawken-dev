@@ -1,0 +1,11 @@
+---
+// Marca un texto que falta confirmar. Solo aparece con `npm run dev`; en el sitio publicado no se renderiza.
+interface Props {
+  as?: 'span' | 'li' | 'p';
+}
+
+const { as: Tag = 'span' } = Astro.props;
+const visible = import.meta.env.DEV;
+---
+
+{visible && <Tag class="pendiente" title="Pendiente: no se publica"><slot /></Tag>}

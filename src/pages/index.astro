@@ -1,0 +1,45 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import Ticker from '../components/Ticker.astro';
+import Kicker from '../components/Kicker.astro';
+import ProjectRow from '../components/ProjectRow.astro';
+import Servicios from '../components/Servicios.astro';
+import Proceso from '../components/Proceso.astro';
+import SobreMi from '../components/SobreMi.astro';
+import Preguntas from '../components/Preguntas.astro';
+import Cta from '../components/Cta.astro';
+
+const proyectos = (await getCollection('proyectos')).sort((a, b) => a.data.orden - b.data.orden);
+---
+
+<Base>
+  <main>
+    <Hero />
+    <Ticker />
+
+    <section class="section bk" id="proyectos" aria-labelledby="t-proy">
+      <div class="wrap">
+        <Kicker numero="01" texto="Proyectos" />
+        <div class="sec-head">
+          <h2 id="t-proy">Negocios reales,<br />funcionando hoy</h2>
+          <p class="lead">Cada caso cuenta qué problema había y cómo se resolvió. Donde hay demo, la podés probar sin romper nada.</p>
+        </div>
+        <div class="plist">
+          {proyectos.map((p, i) => <ProjectRow proyecto={p} invertida={i % 2 === 1} />)}
+        </div>
+      </div>
+    </section>
+
+    <Servicios />
+    <Proceso />
+    <SobreMi />
+    <Preguntas />
+    <Cta titulo="¿Arrancamos?" texto="Contame qué te quita tiempo y te digo cómo lo resolvería." />
+  </main>
+</Base>
+
+<style>
+  .plist { display: flex; flex-direction: column; border-top: var(--stroke) solid var(--edge); }
+</style>

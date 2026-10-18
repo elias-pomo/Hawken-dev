@@ -1,0 +1,186 @@
+---
+// Página de caso: una por cada archivo de src/content/proyectos/.
+import { getCollection, type CollectionEntry } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Phone from '../../components/phone/Phone.astro';
+import Tag from '../../components/Tag.astro';
+import Kicker from '../../components/Kicker.astro';
+import Pendiente from '../../components/Pendiente.astro';
+import Cta from '../../components/Cta.astro';
+
+export async function getStaticPaths() {
+  const proyectos = await getCollection('proyectos');
+  return proyectos.map((proyecto) => ({ params: { slug: proyecto.id }, props: { proyecto } }));
+}
+
+interface Props {
+  proyecto: CollectionEntry<'proyectos'>;
+}
+
+const { proyecto } = Astro.props;
+const { nombre, etiqueta, descripcion, caso, links, cta } = proyecto.data;
+const tieneLinks = Boolean(links.demo || links.vivo || links.instagram);
+// Si todo el "antes" está pendiente, en el sitio publicado la columna se oculta y queda solo "Ahora".
+const muestraAntes = import.meta.env.DEV || caso.antes.some((a) => typeof a === 'string');
+---
+
+<Base title={`${nombre} | Hawken`} description={descripcion}>
+  <main>
+    <section class="case-hero wt" aria-labelledby="t-caso">
+      <div class="wrap">
+        <div class="case-hero__copy">
+          <a class="back" href="/#proyectos">← Proyectos</a>
+          <div class="case-hero__tags">
+            <Tag etiqueta={etiqueta} />
+            {links.demo && <span class="tag tag--demo">+ Demo para probar</span>}
+          </div>
+          <h1 id="t-caso">
+            {caso.titulo.map((l) => <span class="ln">{l.resaltado ? <span class="hl">{l.texto}</span> : l.texto}</span>)}
+          </h1>
+          <p class="lead">{caso.bajada}</p>
+          <dl class="ficha">
+            <div><dt>Rubro</dt><dd>{caso.ficha.rubro}</dd></div>
+            <div><dt>Tipo</dt><dd>{caso.ficha.tipo}</dd></div>
+            <div><dt>Estado</dt><dd>{caso.ficha.estado}</dd></div>
+          </dl>
+        </div>
+        <div class="case-hero__vis">
+          <Phone pantalla={caso.pantalla} hora="15:00" />
+        </div>
+      </div>
+    </section>
+
+    <section class="section bk" aria-labelledby="t-prob">
+      <div class="wrap">
+        <Kicker numero="01" texto="El problema y la solución" />
+        <div class:list={['vs', { 'vs--solo': !muestraAntes }]}>
+          {muestraAntes && (
+            <div>
+              <h2>{caso.antesTitulo}</h2>
+              <ul>
+                {caso.antes.map((a) =>
+                  typeof a === 'string' ? <li>{a}</li> : <Pendiente as="li">{a.texto}</Pendiente>,
+                )}
+              </ul>
+            </div>
+          )}
+          <div class="vs__ahora">
+            <h2 id="t-prob">{muestraAntes ? 'Ahora' : 'La solución'}</h2>
+            <ul>{caso.ahora.map((a) => <li>{a}</li>)}</ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section wt" aria-labelledby="t-func">
+      <div class="wrap">
+        <Kicker numero="02" texto="Qué hace" />
+        <div class="sec-head"><h2 id="t-func">Funciones<br />clave</h2></div>
+        <div class="feats">
+          {caso.funciones.map((f, i) => (
+            <div class="feat"><span class="feat__n">{i + 1}</span><strong>{f.titulo}</strong><p>{f.texto}</p></div>
+          ))}
+        </div>
+        <div class="shots" tabindex="0" role="region" aria-label="Pantallas, deslizá para ver más">
+          {caso.capturas.map((c) => (
+            <figure>
+              <Phone pantalla={c.pantalla} />
+              <figcaption>{c.texto}</figcaption>
+            </figure>
+          ))}
+        </div>
+        <p class="shots__nota">Pantallas ilustrativas. Las capturas reales se suman pronto.</p>
+      </div>
+    </section>
+
+    <section class="section bk" id="links" aria-labelledby="t-links">
+      <div class="wrap">
+        <Kicker numero="03" texto="Miralo funcionando" />
+        <div class="tech">
+          <div class="tech__info">
+            <h2 id="t-links">{links.demo ? <>Probalo<br />vos</> : <>Con qué<br />está hecho</>}</h2>
+            {links.demo && <p class="lead">La demo es un negocio de ejemplo: reservá lo que quieras, no le llega a nadie.</p>}
+            <span class="label">Tecnología</span>
+            <ul class="chips">{caso.stack.map((s) => <li>{s}</li>)}</ul>
+          </div>
+          <div class="links-box">
+            <h3>{tieneLinks ? 'Dónde verlo' : 'Próximamente online'}</h3>
+            <div class="btns btns--full">
+              {links.demo
+                ? <a class="btn btn--lima" href={links.demo} target="_blank" rel="noopener">Probar la demo <span class="arr">↗</span></a>
+                : <span class="btn" aria-disabled="true">Demo: próximamente</span>}
+              {links.vivo && <a class="btn" href={links.vivo} target="_blank" rel="noopener">Ver la web real <span class="arr">↗</span></a>}
+              {links.instagram && <a class="btn" href={links.instagram} target="_blank" rel="noopener">Ver su Instagram <span class="arr">↗</span></a>}
+            </div>
+            {links.vivoAviso && <p class="warn">{links.vivoAviso}</p>}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <Cta titulo={cta.titulo} texto={cta.texto} mensaje={cta.mensaje} boton="Escribime" compacto />
+  </main>
+</Base>
+
+<style>
+  .case-hero .wrap { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--s6); align-items: center; padding-block: var(--s6) var(--s12); }
+  .case-hero__copy { display: flex; flex-direction: column; gap: var(--s3); min-width: 0; }
+  .case-hero__tags { display: flex; flex-wrap: wrap; gap: 12px; }
+  .case-hero__vis { justify-self: center; width: min(300px, 100%); }
+  .back { display: inline-flex; align-items: center; min-height: 44px; font-size: 13px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; }
+  .back:hover { text-decoration: underline; text-decoration-thickness: 3px; text-underline-offset: 6px; }
+  h1 { font-size: clamp(36px, 7.4vw, 100px); line-height: 0.88; letter-spacing: -0.035em; }
+  .ln { display: block; }
+  .ficha { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: var(--s2) 0 0; border-top: var(--stroke) solid var(--negro); }
+  .ficha div { display: flex; flex-direction: column; gap: 2px; min-width: 0; padding: 12px 12px 0 0; }
+  .ficha dt { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gris-claro); }
+  .ficha dd { margin: 0; font-size: 16px; font-weight: 700; }
+
+  .vs { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); border: var(--stroke) solid var(--edge); }
+  .vs > div { display: flex; flex-direction: column; gap: var(--s3); min-width: 0; padding: var(--s4); }
+  .vs h2 { font-size: clamp(30px, 4vw, 48px); }
+  .vs ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+  .vs li { padding: 14px 0; border-top: 2px solid var(--rule); font-size: 17px; }
+  .vs__ahora { border-left: var(--stroke) solid var(--edge); background: var(--lima); color: var(--negro); }
+  .vs__ahora li { border-top-color: var(--negro); font-weight: 500; }
+  .vs--solo { grid-template-columns: 1fr; }
+  .vs--solo .vs__ahora { border-left: 0; }
+
+  .feats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: var(--stroke) solid var(--edge); }
+  .feat { display: flex; flex-direction: column; gap: 8px; min-width: 0; padding: var(--s3) var(--s3) 0 0; }
+  .feat + .feat { padding-left: var(--s3); border-left: 2px solid var(--rule); }
+  .feat__n { width: 40px; height: 40px; margin-bottom: 6px; display: grid; place-items: center; background: var(--violeta); color: var(--blanco); font-family: var(--display); font-size: 16px; }
+  .feat strong { font-size: 19px; }
+  .feat p { font-size: 15px; color: var(--muted); }
+
+  .shots { display: flex; gap: var(--s4); margin-top: var(--s8); padding: 4px 10px 24px 4px; overflow-x: auto; scroll-snap-type: x mandatory; }
+  .shots figure { flex: none; width: 230px; margin: 0; scroll-snap-align: start; }
+  .shots figcaption { margin-top: 12px; font-size: 13px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; }
+  .shots__nota { font-size: 14px; color: var(--muted); }
+
+  .tech { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: var(--s6); align-items: start; }
+  .tech__info { display: flex; flex-direction: column; gap: var(--s3); min-width: 0; }
+  .tech__info .label { margin-top: var(--s2); }
+  .chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .chips li { padding: 6px 12px; box-shadow: inset 0 0 0 2px var(--edge); font-size: 14px; font-weight: 500; }
+  .links-box { display: flex; flex-direction: column; gap: var(--s3); padding: var(--s4); border: var(--stroke) solid var(--edge); box-shadow: 12px 12px 0 var(--drop); }
+  .warn { display: flex; gap: 10px; padding: 10px 12px; background: var(--lima); color: var(--negro); font-size: 14px; font-weight: 500; }
+  .warn::before { content: '!'; flex: none; font-family: var(--display); }
+
+  @media (max-width: 900px) {
+    .case-hero .wrap { grid-template-columns: 1fr; padding-block: var(--s4) var(--s8); }
+    .feats { grid-template-columns: 1fr 1fr; row-gap: var(--s4); }
+    .feat:nth-child(3) { padding-left: 0; border-left: 0; }
+    .tech { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 760px) {
+    .vs { grid-template-columns: 1fr; }
+    .vs__ahora { border-left: 0; border-top: var(--stroke) solid var(--edge); }
+  }
+  @media (max-width: 520px) {
+    .ficha { grid-template-columns: 1fr 1fr; }
+    .feats { grid-template-columns: 1fr; }
+    .feat + .feat { padding-left: 0; padding-top: var(--s3); border-left: 0; border-top: 2px solid var(--rule); }
+    .links-box { box-shadow: var(--offset) var(--offset) 0 var(--drop); padding: var(--s3); }
+  }
+</style>

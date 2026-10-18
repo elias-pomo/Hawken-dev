@@ -1,0 +1,48 @@
+/* Tokens de la marca Hawken (fuente: sistema de diseño, tokens.json).
+   La marca no sigue el tema del sistema: cada sección elige su superficie con .wt, .bk o .li. */
+:root {
+  --negro: #0A0A0A;
+  --blanco: #FFFFFF;
+  --lima: #C6F432;
+  --violeta: #6B4EFF;
+  --violeta-claro: #A592FF; /* violeta-text sobre negro */
+  --gris-claro: #4A4A4A;    /* ink-muted sobre blanco */
+  --gris-oscuro: #B5B5B5;   /* ink-muted sobre negro */
+  --linea-clara: #E6E6E6;
+  --linea-oscura: #2A2A2A;
+  --lima-suave: #F4FBD9;    /* hover de opciones sobre blanco */
+
+  --display: 'Archivo Black', 'Arial Black', Impact, sans-serif;
+  --sans: 'Space Grotesk', 'Helvetica Neue', Arial, sans-serif;
+
+  --stroke: 3px;  /* stroke-sm: bordes en la web */
+  --offset: 6px;  /* offset-sm: sombra dura de botones y tarjetas */
+
+  --s1: 8px;
+  --s2: 16px;
+  --s3: 24px;
+  --s4: 32px;
+  --s6: 48px;
+  --s8: 72px;
+  --s12: 120px;
+
+  --ease: cubic-bezier(0.2, 0.7, 0.3, 1);
+  color-scheme: light;
+}
+
+/* Superficies: cada una define sus colores locales. */
+.wt {
+  --bg: var(--blanco); --fg: var(--negro); --muted: var(--gris-claro);
+  --edge: var(--negro); --drop: var(--negro); --vtext: var(--violeta); --rule: var(--linea-clara);
+  background: var(--bg); color: var(--fg);
+}
+.bk {
+  --bg: var(--negro); --fg: var(--blanco); --muted: var(--gris-oscuro);
+  --edge: var(--blanco); --drop: var(--violeta); --vtext: var(--violeta-claro); --rule: var(--linea-oscura);
+  background: var(--bg); color: var(--fg);
+}
+.li {
+  --bg: var(--lima); --fg: var(--negro); --muted: var(--negro);
+  --edge: var(--negro); --drop: var(--negro); --vtext: var(--negro); --rule: var(--negro);
+  background: var(--bg); color: var(--fg);
+}
