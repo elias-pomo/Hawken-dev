@@ -12,7 +12,7 @@ Landing y portafolio de **Hawken | Webs y sistemas** (Elias). Astro 7, sin Tailw
 - Los textos van en español rioplatense, con voseo. No inventar datos de clientes: lo que falte confirmar va como `{ texto, pendiente: true }` y se muestra solo en desarrollo.
 - Mobile first: revisar a 360, 390, 768 y 1280 px.
 - El contenido va en `src/config/site.ts` y `src/content/proyectos/*.md`, no en los componentes.
-- Hosting: Cloudflare Pages o Netlify. Vercel Hobby no permite uso comercial.
+- Hosting: Worker de Cloudflare con assets estáticos. Vercel Hobby no permite uso comercial.
 
 ## Estructura
 - `src/config/site.ts` (contacto, WhatsApp, nav) y `src/config/home.ts` (textos de la home).
@@ -31,7 +31,7 @@ Landing y portafolio de **Hawken | Webs y sistemas** (Elias). Astro 7, sin Tailw
 **Hecho**
 - La home, las 3 páginas de caso y la 404 están armadas según la maqueta v2.
 - Capturas reales en las tarjetas, el hero de cada caso y la galería. La foto de Elias va en "Sobre mí".
-- Imagen para compartir: `public/og.png` (1200×630), con URL completa a `https://hawkendev.com`.
+- Imagen para compartir: `public/og.png` (1200×630), con URL completa a `https://www.hawkendev.com`.
 - Origen en WhatsApp: con `?ref=ig`, `?ref=wa`, `?ref=qr` o `?ref=google`, el mensaje precargado dice de dónde viene la persona (`src/scripts/origen.ts`).
 - Botón de WhatsApp fijo en el celular (`WhatsAppFlotante.astro`).
 - "Siguiente proyecto" al final de cada caso, y lugar para el testimonio (`caso.testimonio`, con `pendiente: true` mientras no haya una frase real).
@@ -40,7 +40,7 @@ Landing y portafolio de **Hawken | Webs y sistemas** (Elias). Astro 7, sin Tailw
 - Demo del hero accesible: anuncia cada paso, mueve el foco y las horas ocupadas se escuchan como "ocupado".
 
 **Falta**
-1. Deploy en Cloudflare Pages (build `npm run build`, salida `dist`). Dominio: `hawkendev.com`, ya fijado en `astro.config.mjs`; Node 22 en `.node-version`.
+1. Publicado como Worker de Cloudflare (`hawken-dev`, config en `wrangler.jsonc`) en `https://www.hawkendev.com`. Cada push a `main` despliega. Node 22 en `.node-version`. Para probar el Worker en local: `npm run build` y `npx wrangler dev`.
 2. Activar Web Analytics en el panel de Cloudflare Pages (no requiere código).
 3. Frases reales de Martín y Fernanda para el testimonio. Confirmar el "antes" de Martega's.
 4. Capturas de Luxury y Box Club en mayor resolución (miden ~330 px de ancho y en pantallas 2x se ven blandas).

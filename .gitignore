@@ -25,3 +25,6 @@ pnpm-debug.log*
 
 # capturas de Playwright MCP
 .playwright-mcp/
+
+# archivos locales de Wrangler (npx wrangler dev)
+.wrangler/

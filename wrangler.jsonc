@@ -1,0 +1,12 @@
+// Configuración del Worker de Cloudflare que publica el sitio (proyecto "hawken-dev").
+// Workers Builds la lee en cada push a main: compila con `npm run build` y sube la carpeta dist.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "hawken-dev",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./dist",
+    // Sin esto, una URL que no existe devuelve un 404 vacío; así muestra src/pages/404.astro.
+    "not_found_handling": "404-page"
+  }
+}
