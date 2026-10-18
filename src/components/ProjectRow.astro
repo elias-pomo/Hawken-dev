@@ -1,5 +1,5 @@
 ---
-// Fila de proyecto en la home: pantalla sobre una placa de color + datos concretos + links.
+// Fila de proyecto en la home: captura real sobre una placa de color + datos concretos + links.
 import type { CollectionEntry } from 'astro:content';
 import Phone from './phone/Phone.astro';
 import Tag from './Tag.astro';
@@ -10,15 +10,14 @@ interface Props {
 }
 
 const { proyecto, invertida = false } = Astro.props;
-const { nombre, etiqueta, rubro, resumen, placa, pantalla, datos, links } = proyecto.data;
+const { nombre, etiqueta, rubro, resumen, placa, captura, datos, links } = proyecto.data;
 const href = `/proyectos/${proyecto.id}/`;
 const [primera, ...resto] = nombre.split(' ');
 ---
 
 <article class:list={['proj', { 'proj--rev': invertida }]}>
   <div class="proj__vis" style={`--placa: var(--${placa})`}>
-    <Phone pantalla={pantalla} hora="20:30" class="proj__phone" />
-    <span class="proj__ilus">Ilustración</span>
+    <Phone imagen={captura} alt={`Captura de ${nombre}`} sizes="(max-width: 900px) 250px, 250px" class="proj__phone" />
   </div>
   <div class="proj__body">
     <div class="proj__top"><Tag etiqueta={etiqueta} /><span class="proj__rubro">{rubro}</span></div>
@@ -46,7 +45,6 @@ const [primera, ...resto] = nombre.split(' ');
   .proj__vis { position: relative; display: flex; justify-content: center; min-width: 0; padding: 24px 24px 24px 0; }
   .proj__vis::before { content: ''; position: absolute; inset: 0 0 18% 22%; background: var(--placa); }
   .proj__vis :global(.proj__phone) { width: min(250px, 100%); }
-  .proj__ilus { position: absolute; z-index: 3; left: 0; bottom: 4px; padding: 4px 8px; background: var(--bg); color: var(--fg); box-shadow: inset 0 0 0 2px var(--edge); font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; }
   .proj__body { display: flex; flex-direction: column; gap: var(--s3); min-width: 0; }
   .proj__top { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
   .proj__rubro { font-size: 13px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }

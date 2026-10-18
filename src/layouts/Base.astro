@@ -6,6 +6,7 @@ import '@fontsource/space-grotesk/latin-500.css';
 import '@fontsource/space-grotesk/latin-700.css';
 import '../styles/global.css';
 import { site, whatsappLink, navLinks } from '../config/site';
+import WhatsAppFlotante from '../components/WhatsAppFlotante.astro';
 
 interface Props {
   title?: string;
@@ -14,6 +15,8 @@ interface Props {
 
 const { title = site.title, description = site.description } = Astro.props;
 const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : undefined;
+// La vista previa de WhatsApp e Instagram necesita la URL completa de la imagen: sin `site` no se publica.
+const ogImage = Astro.site ? new URL('/og.png', Astro.site).href : undefined;
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -36,12 +39,24 @@ const jsonLd = {
     <meta name="description" content={description} />
     {canonical && <link rel="canonical" href={canonical} />}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
     <meta name="theme-color" content="#0A0A0A" />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="es_AR" />
+    <meta property="og:site_name" content="Hawken" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     {canonical && <meta property="og:url" content={canonical} />}
+    {ogImage && (
+      <>
+        <meta property="og:image" content={ogImage} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content="Hawken: tu negocio atiende aunque vos no estés" />
+        <meta name="twitter:card" content="summary_large_image" />
+      </>
+    )}
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   </head>
   <body>
@@ -74,11 +89,17 @@ const jsonLd = {
       </div>
     </footer>
 
+    <WhatsAppFlotante />
+
     <script>
+      import { aplicarOrigen } from '../scripts/origen';
+
       // Cierra el menú mobile al tocar un link.
       document.querySelectorAll<HTMLAnchorElement>('.menu-panel a').forEach((a) =>
         a.addEventListener('click', () => a.closest('details')?.removeAttribute('open')),
       );
+
+      aplicarOrigen();
     </script>
   </body>
 </html>

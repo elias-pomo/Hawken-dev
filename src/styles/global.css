@@ -123,24 +123,12 @@ p { margin: 0; max-width: 60ch; }
 .phone__notch i { width: 56px; height: 8px; background: var(--negro); }
 .phone__screen { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 12px; padding: 16px; font-size: 14px; line-height: 1.35; }
 
-.mini { gap: 8px; font-size: 12px; line-height: 1.3; }
-.mini__h { font-family: var(--display); font-size: 14px; text-transform: uppercase; }
-.mini__row {
-  display: flex; justify-content: space-between; align-items: center; gap: 6px;
-  padding: 8px; border: 2px solid var(--negro);
-  font-weight: 700; font-variant-numeric: tabular-nums;
-}
-.mini__row--on { background: var(--lima); }
-.mini__row--off { border-style: dashed; border-color: #BDBDBD; color: #767676; }
-.mini__total { margin-top: auto; padding: 10px; display: flex; flex-direction: column; gap: 2px; background: var(--negro); color: var(--blanco); }
-.mini__total b { font-family: var(--display); font-size: 22px; color: var(--lima); font-variant-numeric: tabular-nums; }
-.mini__bar { height: 8px; background: var(--linea-clara); }
-.mini__bar i { display: block; height: 100%; background: var(--negro); }
-.mini__week { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 3px; font-size: 10px; font-weight: 700; text-align: center; }
-.mini__week i { display: block; height: 22px; border: 1.5px solid var(--negro); }
-.mini__week i.a { background: var(--lima); }
-.mini__week i.v { background: var(--violeta); }
-.mini__week i.x { border-style: dashed; border-color: #BDBDBD; }
 
 /* ---------- Pendientes (solo se ven en desarrollo) ---------- */
 .pendiente { border-bottom: 2px dotted var(--vtext); color: var(--vtext); font-weight: 500; }
+
+/* Texto solo para lectores de pantalla. */
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}

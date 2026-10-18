@@ -20,26 +20,35 @@ Landing y portafolio de **Hawken | Webs y sistemas** (Elias). Astro 7, sin Tailw
 - `src/components/`:
   - `Hero` (con la demo de turnos en JS), `Ticker`, `ProjectRow`, `Servicios`, `Proceso`, `SobreMi`, `Preguntas` y `Cta`;
   - los chicos: `Kicker`, `Tag` y `Pendiente`;
-  - `phone/` (`Phone` y `Screen`, con las pantallas dibujadas).
+  - `phone/Phone.astro` (marco de celular: con `imagen` muestra una captura; sin ella, el contenido del slot, como la demo del hero);
+  - `WhatsAppFlotante` (botón fijo en el celular).
+- `src/scripts/origen.ts`: agrega el origen de la visita (`?ref=`) al mensaje de WhatsApp.
+- `src/assets/`: capturas y foto. Antes de commitear, sacar las que muestran datos personales.
 - `src/pages/`: `index`, `proyectos/[slug]` y `404`.
 - Pendientes: `{ texto, pendiente: true }` en el contenido o `pendiente: true` en `home.ts`. Se ven solo con `npm run dev`. Si todo el "antes" de un caso está pendiente, en producción esa columna se oculta.
 
-## Estado (17/10/2026)
+## Estado (18/10/2026)
 **Hecho**
-- La home y las 3 páginas de caso están armadas según la maqueta v2, y hay una página 404.
-- `astro check` sin errores y `npm run build` genera las 5 páginas.
-- Revisado a 360, 375 y 1280 px: no hay scroll horizontal y la demo de turnos funciona completa.
+- La home, las 3 páginas de caso y la 404 están armadas según la maqueta v2.
+- Capturas reales en las tarjetas, el hero de cada caso y la galería. La foto de Elias va en "Sobre mí".
+- Imagen para compartir: `public/og.png` (1200×630). Se publica solo si está `SITE_URL` definido (ver `astro.config.mjs`).
+- Origen en WhatsApp: con `?ref=ig`, `?ref=wa`, `?ref=qr` o `?ref=google`, el mensaje precargado dice de dónde viene la persona (`src/scripts/origen.ts`).
+- Botón de WhatsApp fijo en el celular (`WhatsAppFlotante.astro`).
+- "Siguiente proyecto" al final de cada caso, y lugar para el testimonio (`caso.testimonio`, con `pendiente: true` mientras no haya una frase real).
+- Íconos de iPhone y Android y `site.webmanifest`.
+- `public/_headers` con seguridad y caché para Cloudflare Pages.
+- Demo del hero accesible: anuncia cada paso, mueve el foco y las horas ocupadas se escuchan como "ocupado".
 
 **Falta**
-1. Capturas reales: reemplazar las pantallas dibujadas (`Screen.astro`) por imágenes con `<Image />` y sacar la etiqueta "Ilustración".
-2. Foto real de Elias en `SobreMi.astro`.
-3. Cuando haya dominio: poner `site` en `astro.config.mjs` (para la URL canónica y Open Graph) y crear la imagen de Open Graph de 1200×630.
-4. Deploy en Cloudflare Pages: comando `npm run build`, carpeta `dist`.
+1. Deploy en Cloudflare Pages (build `npm run build`, salida `dist`) con la variable `SITE_URL` = dominio.
+2. Activar Web Analytics en el panel de Cloudflare Pages (no requiere código).
+3. Frases reales de Martín y Fernanda para el testimonio. Confirmar el "antes" de Martega's.
+4. Capturas de Luxury y Box Club en mayor resolución (miden ~330 px de ancho y en pantallas 2x se ven blandas).
 5. Pasar Lighthouse en mobile (objetivo ≥95).
 
 ## Datos a confirmar con Elias
-- El "antes" de Martega's (con Martín) y de Luxury (con Fernanda).
-- Una foto real para "Sobre mí".
-- Las respuestas de "¿Cuánto tarda?" y "¿Necesito dominio?", y el soporte después de publicar.
+- El "antes" de Martega's, con Martín.
+- Una frase de testimonio de Martín y otra de Fernanda, con permiso para publicarlas.
+- Qué soporte hay después de publicar (paso 4 del proceso).
 - El link de la demo de Agendapp y el deploy de Box Club. Son tareas aparte.
 - Si existe el "cuaderno de stock".

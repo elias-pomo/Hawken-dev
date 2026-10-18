@@ -6,7 +6,7 @@ rubro: Gimnasio
 descripcion: "Proyecto demo: sistema de clases y reservas para un gimnasio de deportes de contacto, con grilla semanal, cupos y panel para profes."
 resumen: Grilla semanal de clases con cupos en vivo, reservas con código y un panel para que cada profe cargue sus clases.
 placa: violeta
-pantalla: clases
+captura: ../../assets/proyectos/boxeo4.jpg
 datos:
   - { valor: 22 clases, texto: por semana en la demo }
   - { valor: 5 disciplinas, texto: con su foto y su sala }
@@ -19,7 +19,7 @@ caso:
     - { texto: "para un gimnasio" }
   bajada: Un proyecto demo para gimnasios y estudios. Los alumnos ven la grilla de la semana, reservan su lugar y lo cancelan solos.
   ficha: { rubro: Gimnasio, tipo: Sistema de clases, estado: Proyecto demo }
-  pantalla: clases
+  captura: ../../assets/proyectos/boxeo2.jpg
   antesTitulo: El problema típico
   antes:
     - Las clases se llenan de más o quedan vacías porque nadie sabe cuántos lugares quedan
@@ -34,9 +34,11 @@ caso:
     - { titulo: Panel de profes, texto: "Crear, publicar y cancelar clases, y ver los inscriptos." }
     - { titulo: Administración, texto: Usuarios, roles y disciplinas en un solo lugar. }
   capturas:
-    - { pantalla: clases, texto: Grilla semanal }
-    - { pantalla: codigo, texto: Reserva con código }
-    - { pantalla: panel, texto: Panel del profe }
+    - { imagen: ../../assets/proyectos/boxeo4.jpg, texto: Grilla semanal }
+    - { imagen: ../../assets/proyectos/boxeo3.jpg, texto: Disciplinas }
+    - { imagen: ../../assets/proyectos/boxeo6.jpg, texto: Mis reservas }
+    - { imagen: ../../assets/proyectos/boxeo7.jpg, texto: Panel de clases }
+    - { imagen: ../../assets/proyectos/boxeo1.jpg, texto: Ingreso de socios }
   stack: [Node.js, Express, MongoDB, Handlebars, JWT]
 
 links: {}

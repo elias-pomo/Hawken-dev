@@ -25,14 +25,15 @@ import { whatsappLink } from '../config/site';
     <div class="stage">
       <div class="stage__label">Ejemplo<br />ilustrativo</div>
       <Phone hora="20:30">
-        <div class="phone__screen demo" id="demo" aria-live="polite">
-          <div class="demo__top"><b>Martega's</b><div class="demo__prog"><i class="on"></i><i></i><i></i></div></div>
-          <p class="demo__q">¿Qué te hacés?</p>
+        <div class="phone__screen demo" id="demo" role="group" aria-label="Demo: sacá un turno de ejemplo">
+          <div class="demo__top"><b>Martega's</b><div class="demo__prog"><span class="sr-only">Paso 1 de 3</span><i class="on" aria-hidden="true"></i><i aria-hidden="true"></i><i aria-hidden="true"></i></div></div>
+          <p class="demo__q" tabindex="-1">¿Qué te hacés?</p>
           <button type="button" class="demo__opt" data-serv="0">Corte<span>$12.000</span></button>
           <button type="button" class="demo__opt" data-serv="1">Corte y barba<span>$15.000</span></button>
           <p class="demo__hint">Sin registrarte. Tocá un servicio.</p>
         </div>
       </Phone>
+      <p class="sr-only" id="demo-estado" aria-live="polite"></p>
     </div>
   </div>
 </section>
@@ -48,29 +49,43 @@ import { whatsappLink } from '../config/site';
   const ocupadas = new Set(['16:00', '19:00', '21:00']);
 
   const scr = document.getElementById('demo');
+  const estado = document.getElementById('demo-estado');
   let st: Estado = { paso: 1, serv: 0, hora: '', codigo: '' };
 
   const progreso = (n: number) =>
-    `<div class="demo__prog" aria-label="Paso ${n} de 3">${[1, 2, 3].map((i) => `<i class="${i <= n ? 'on' : ''}"></i>`).join('')}</div>`;
+    `<div class="demo__prog"><span class="sr-only">Paso ${n} de 3</span>${[1, 2, 3]
+      .map((i) => `<i class="${i <= n ? 'on' : ''}" aria-hidden="true"></i>`)
+      .join('')}</div>`;
+  // Las horas ocupadas no se deshabilitan del todo: así se pueden recorrer con el teclado y se escucha "ocupado".
+  const slot = (h: string) =>
+    ocupadas.has(h)
+      ? `<button type="button" class="demo__slot" aria-disabled="true">${h}<span class="sr-only"> ocupado</span></button>`
+      : `<button type="button" class="demo__slot" data-hora="${h}">${h}</button>`;
+  const avisos: Record<Estado['paso'], () => string> = {
+    1: () => 'Paso 1 de 3: elegí un servicio.',
+    2: () => `Paso 2 de 3: elegiste ${servicios[st.serv].nombre}. Elegí un horario.`,
+    3: () => `Paso 3 de 3: jueves ${st.hora}. Confirmá el turno.`,
+    4: () => `Turno reservado. Tu código es ${st.codigo.split('').join(' ')}.`,
+  };
   const top = (n: number) => `<div class="demo__top"><b>Martega's</b>${progreso(n)}</div>`;
   const fila = (a: string, b: string) => `<div class="demo__sum"><span>${a}</span><span>${b}</span></div>`;
 
   const pantallas: Record<Estado['paso'], () => string> = {
     1: () =>
       top(1) +
-      '<p class="demo__q">¿Qué te hacés?</p>' +
+      '<p class="demo__q" tabindex="-1">¿Qué te hacés?</p>' +
       servicios.map((s, i) => `<button type="button" class="demo__opt" data-serv="${i}">${s.nombre}<span>${s.precio}</span></button>`).join('') +
       '<p class="demo__hint">Sin registrarte. Tocá un servicio.</p>',
     2: () =>
       top(2) +
-      '<p class="demo__q">Jueves · ¿a qué hora?</p><div class="demo__slots">' +
-      horas.map((h) => `<button type="button" class="demo__slot" data-hora="${h}"${ocupadas.has(h) ? ' disabled aria-label="' + h + ' ocupado"' : ''}>${h}</button>`).join('') +
+      '<p class="demo__q" tabindex="-1">Jueves · ¿a qué hora?</p><div class="demo__slots">' +
+      horas.map(slot).join('') +
       '</div>' +
       fila(servicios[st.serv].nombre, servicios[st.serv].precio) +
       '<button type="button" class="demo__link" data-ir="1">← Cambiar servicio</button>',
     3: () =>
       top(3) +
-      '<p class="demo__q">Confirmá tu turno</p>' +
+      '<p class="demo__q" tabindex="-1">Confirmá tu turno</p>' +
       fila('Servicio', servicios[st.serv].nombre) +
       fila('Día y hora', `Jueves ${st.hora}`) +
       fila('Precio', servicios[st.serv].precio) +
@@ -78,7 +93,7 @@ import { whatsappLink } from '../config/site';
       '<button type="button" class="demo__ok" data-ok>Confirmar turno</button>',
     4: () =>
       '<div class="demo__top"><b>Martega\'s</b><span class="label">Listo</span></div>' +
-      '<div class="demo__done"><p class="demo__q">¡Turno reservado!</p>' +
+      '<div class="demo__done"><p class="demo__q" tabindex="-1">¡Turno reservado!</p>' +
       `<p>Jueves ${st.hora} · ${servicios[st.serv].nombre}</p>` +
       '<span class="label">Tu código</span>' +
       `<div class="demo__code">${st.codigo.split('').map((d) => `<b>${d}</b>`).join('')}</div>` +
@@ -86,13 +101,17 @@ import { whatsappLink } from '../config/site';
       '<button type="button" class="demo__link" data-reiniciar>Probar de nuevo</button>',
   };
 
+  // Al cambiar de paso, el foco va a la pregunta nueva y se anuncia el estado (lectores de pantalla).
   const render = () => {
-    if (scr) scr.innerHTML = pantallas[st.paso]();
+    if (!scr) return;
+    scr.innerHTML = pantallas[st.paso]();
+    scr.querySelector<HTMLElement>('.demo__q')?.focus({ preventScroll: true });
+    if (estado) estado.textContent = avisos[st.paso]();
   };
 
   scr?.addEventListener('click', (e) => {
     const b = (e.target as HTMLElement).closest('button');
-    if (!b || b.disabled) return;
+    if (!b || b.getAttribute('aria-disabled') === 'true') return;
     const d = b.dataset;
     if (d.serv !== undefined) st = { ...st, paso: 2, serv: Number(d.serv) };
     else if (d.hora) st = { ...st, paso: 3, hora: d.hora };
@@ -142,10 +161,11 @@ import { whatsappLink } from '../config/site';
   .demo__opt { display: flex; justify-content: space-between; align-items: center; gap: 8px; width: 100%; min-height: 52px; padding: 10px 12px;
     background: var(--blanco); color: var(--negro); border: 2px solid var(--negro); font-weight: 700; font-size: 14px; text-align: left; cursor: pointer; }
   .demo__opt span { font-weight: 500; font-variant-numeric: tabular-nums; }
-  .demo__opt:hover, .demo__slot:hover:not(:disabled) { background: var(--lima-suave); }
+  .demo__opt:hover, .demo__slot:hover:not([aria-disabled]) { background: var(--lima-suave); }
+  .demo__q:focus { outline: none; }
   .demo__slots { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
   .demo__slot { min-height: 46px; background: var(--blanco); color: var(--negro); border: 2px solid var(--negro); font-weight: 700; font-size: 14px; font-variant-numeric: tabular-nums; cursor: pointer; }
-  .demo__slot:disabled { border-style: dashed; border-color: #BDBDBD; color: #767676; text-decoration: line-through; cursor: not-allowed; }
+  .demo__slot[aria-disabled] { border-style: dashed; border-color: #BDBDBD; color: #767676; text-decoration: line-through; cursor: not-allowed; }
   .demo__sum { display: flex; justify-content: space-between; gap: 8px; padding-top: 10px; border-top: 2px solid var(--negro); font-size: 13px; font-variant-numeric: tabular-nums; }
   .demo__ok { margin-top: auto; min-height: 50px; border: 0; background: var(--negro); color: var(--lima); font-weight: 700; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; }
   .demo__link { width: fit-content; min-height: 44px; padding: 6px 0; background: none; border: 0; color: var(--negro); font-weight: 700; font-size: 13px; text-decoration: underline; text-underline-offset: 4px; cursor: pointer; }

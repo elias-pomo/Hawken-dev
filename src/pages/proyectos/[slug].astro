@@ -9,16 +9,22 @@ import Pendiente from '../../components/Pendiente.astro';
 import Cta from '../../components/Cta.astro';
 
 export async function getStaticPaths() {
-  const proyectos = await getCollection('proyectos');
-  return proyectos.map((proyecto) => ({ params: { slug: proyecto.id }, props: { proyecto } }));
+  const proyectos = (await getCollection('proyectos')).sort((a, b) => a.data.orden - b.data.orden);
+  // "Siguiente proyecto" sigue el orden de la home; después del último vuelve al primero.
+  return proyectos.map((proyecto, i) => ({
+    params: { slug: proyecto.id },
+    props: { proyecto, siguiente: proyectos[(i + 1) % proyectos.length] },
+  }));
 }
 
 interface Props {
   proyecto: CollectionEntry<'proyectos'>;
+  siguiente: CollectionEntry<'proyectos'>;
 }
 
-const { proyecto } = Astro.props;
+const { proyecto, siguiente } = Astro.props;
 const { nombre, etiqueta, descripcion, caso, links, cta } = proyecto.data;
+const testimonio = caso.testimonio && (!caso.testimonio.pendiente || import.meta.env.DEV) ? caso.testimonio : undefined;
 const tieneLinks = Boolean(links.demo || links.vivo || links.instagram);
 // Si todo el "antes" está pendiente, en el sitio publicado la columna se oculta y queda solo "Ahora".
 const muestraAntes = import.meta.env.DEV || caso.antes.some((a) => typeof a === 'string');
@@ -45,7 +51,7 @@ const muestraAntes = import.meta.env.DEV || caso.antes.some((a) => typeof a === 
           </dl>
         </div>
         <div class="case-hero__vis">
-          <Phone pantalla={caso.pantalla} hora="15:00" />
+          <Phone imagen={caso.captura} alt={`Captura de ${nombre}`} sizes="(max-width: 600px) 260px, 320px" prioridad />
         </div>
       </div>
     </section>
@@ -69,6 +75,13 @@ const muestraAntes = import.meta.env.DEV || caso.antes.some((a) => typeof a === 
             <ul>{caso.ahora.map((a) => <li>{a}</li>)}</ul>
           </div>
         </div>
+
+        {testimonio && (
+          <figure class:list={['testimonio', { pendiente: testimonio.pendiente }]}>
+            <blockquote><p>{testimonio.texto}</p></blockquote>
+            <figcaption><b>{testimonio.autor}</b><span>{testimonio.rol}</span></figcaption>
+          </figure>
+        )}
       </div>
     </section>
 
@@ -84,12 +97,11 @@ const muestraAntes = import.meta.env.DEV || caso.antes.some((a) => typeof a === 
         <div class="shots" tabindex="0" role="region" aria-label="Pantallas, deslizá para ver más">
           {caso.capturas.map((c) => (
             <figure>
-              <Phone pantalla={c.pantalla} />
+              <Phone imagen={c.imagen} alt={`${nombre}: ${c.texto}`} sizes="230px" />
               <figcaption>{c.texto}</figcaption>
             </figure>
           ))}
         </div>
-        <p class="shots__nota">Pantallas ilustrativas. Las capturas reales se suman pronto.</p>
       </div>
     </section>
 
@@ -117,6 +129,16 @@ const muestraAntes = import.meta.env.DEV || caso.antes.some((a) => typeof a === 
         </div>
       </div>
     </section>
+
+    {siguiente.id !== proyecto.id && (
+      <nav class="sig wt" aria-label="Siguiente proyecto">
+        <a class="wrap sig__link" href={`/proyectos/${siguiente.id}/`}>
+          <span class="label">Siguiente proyecto</span>
+          <span class="sig__nombre">{siguiente.data.nombre}</span>
+          <span class="sig__arr" aria-hidden="true">→</span>
+        </a>
+      </nav>
+    )}
 
     <Cta titulo={cta.titulo} texto={cta.texto} mensaje={cta.mensaje} boton="Escribime" compacto />
   </main>
@@ -146,6 +168,24 @@ const muestraAntes = import.meta.env.DEV || caso.antes.some((a) => typeof a === 
   .vs--solo { grid-template-columns: 1fr; }
   .vs--solo .vs__ahora { border-left: 0; }
 
+  .testimonio { margin: var(--s8) 0 0; display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: var(--s3); }
+  .testimonio::before { content: '“'; font-family: var(--display); font-size: 120px; line-height: 0.8; color: var(--lima); }
+  .testimonio blockquote { margin: 0; }
+  .testimonio blockquote p { font-family: var(--display); font-size: clamp(24px, 3.2vw, 40px); line-height: 1.08; text-transform: uppercase; letter-spacing: -0.01em; max-width: 30ch; }
+  .testimonio figcaption { grid-column: 2; display: flex; flex-wrap: wrap; gap: 4px 16px; padding-top: var(--s2); border-top: 2px solid var(--edge); }
+  .testimonio figcaption span { color: var(--muted); }
+  .testimonio.pendiente blockquote p { color: var(--vtext); }
+  @media (max-width: 600px) { .testimonio { grid-template-columns: 1fr; gap: 0; } .testimonio figcaption { grid-column: 1; } .testimonio::before { font-size: 80px; } }
+
+  .sig { border-top: var(--stroke) solid var(--negro); }
+  .sig__link { display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: 'label arr' 'nombre arr'; align-items: center; gap: 8px var(--s4); padding-block: var(--s6); text-decoration: none; }
+  .sig__link .label { grid-area: label; color: var(--gris-claro); }
+  .sig__nombre { grid-area: nombre; font-family: var(--display); font-size: clamp(32px, 6vw, 72px); line-height: 0.95; text-transform: uppercase; letter-spacing: -0.02em; }
+  .sig__arr { grid-area: arr; width: 72px; height: 72px; display: grid; place-items: center; background: var(--lima); border: var(--stroke) solid var(--negro); box-shadow: var(--offset) var(--offset) 0 var(--negro); font-family: var(--display); font-size: 32px; transition: transform 0.14s var(--ease), box-shadow 0.14s var(--ease); }
+  .sig__link:hover .sig__arr { transform: translate(var(--offset), var(--offset)); box-shadow: 0 0 0 var(--negro); }
+  .sig__link:hover .sig__nombre { text-decoration: underline; text-decoration-thickness: 4px; text-underline-offset: 8px; }
+  @media (max-width: 520px) { .sig__arr { width: 56px; height: 56px; font-size: 24px; } }
+
   .feats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: var(--stroke) solid var(--edge); }
   .feat { display: flex; flex-direction: column; gap: 8px; min-width: 0; padding: var(--s3) var(--s3) 0 0; }
   .feat + .feat { padding-left: var(--s3); border-left: 2px solid var(--rule); }
@@ -156,7 +196,6 @@ const muestraAntes = import.meta.env.DEV || caso.antes.some((a) => typeof a === 
   .shots { display: flex; gap: var(--s4); margin-top: var(--s8); padding: 4px 10px 24px 4px; overflow-x: auto; scroll-snap-type: x mandatory; }
   .shots figure { flex: none; width: 230px; margin: 0; scroll-snap-align: start; }
   .shots figcaption { margin-top: 12px; font-size: 13px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; }
-  .shots__nota { font-size: 14px; color: var(--muted); }
 
   .tech { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: var(--s6); align-items: start; }
   .tech__info { display: flex; flex-direction: column; gap: var(--s3); min-width: 0; }

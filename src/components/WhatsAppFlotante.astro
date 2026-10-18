@@ -1,0 +1,54 @@
+---
+// Botón fijo de WhatsApp en el celular. Aparece cuando el hero sale de pantalla
+// y se esconde cuando se ve la banda de cierre (que ya tiene su propio botón).
+// Se calcula con scroll + requestAnimationFrame (una medición por cuadro) en vez de IntersectionObserver.
+import { whatsappLink } from '../config/site';
+---
+
+<a class="wa-flot btn btn--lima" href={whatsappLink()} target="_blank" rel="noopener" data-oculto="true" tabindex="-1" aria-hidden="true">
+  Escribime por WhatsApp <span class="arr">↗</span>
+</a>
+
+<script>
+  const boton = document.querySelector<HTMLAnchorElement>('.wa-flot');
+  const inicio = document.querySelector('.hero, .case-hero');
+  const cierre = document.querySelector('.cta');
+
+  if (boton && inicio) {
+    let pendiente = false;
+
+    const actualizar = () => {
+      pendiente = false;
+      const pasoInicio = inicio.getBoundingClientRect().bottom < 0;
+      // Se esconde apenas asoma la banda de cierre (y en el footer, que viene después).
+      const veCierre = cierre ? cierre.getBoundingClientRect().top < window.innerHeight : false;
+      const visible = pasoInicio && !veCierre;
+      boton.dataset.oculto = String(!visible);
+      boton.tabIndex = visible ? 0 : -1;
+      boton.setAttribute('aria-hidden', String(!visible));
+    };
+
+    const alScrollear = () => {
+      if (pendiente) return;
+      pendiente = true;
+      requestAnimationFrame(actualizar);
+    };
+
+    addEventListener('scroll', alScrollear, { passive: true });
+    addEventListener('resize', alScrollear, { passive: true });
+    actualizar();
+  }
+</script>
+
+<style>
+  .wa-flot {
+    position: fixed;
+    z-index: 30;
+    left: max(16px, env(safe-area-inset-left, 0px));
+    right: max(16px, env(safe-area-inset-right, 0px));
+    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    transition: transform 0.25s var(--ease), opacity 0.25s var(--ease);
+  }
+  .wa-flot[data-oculto='true'] { transform: translateY(calc(100% + 32px)); opacity: 0; pointer-events: none; }
+  @media (min-width: 901px) { .wa-flot { display: none; } }
+</style>

@@ -1,18 +1,41 @@
 ---
-// Marco de celular. Sin `pantalla`, muestra lo que se le pase como contenido (la demo del hero).
-import Screen, { type Pantalla } from './Screen.astro';
+// Marco de celular. Con `imagen` muestra una captura real; sin ella, lo que se le pase como contenido (la demo del hero).
+import { Image } from 'astro:assets';
 
 interface Props {
-  pantalla?: Pantalla;
+  imagen?: ImageMetadata;
+  alt?: string;
+  sizes?: string;
+  prioridad?: boolean;
   hora?: string;
   class?: string;
   id?: string;
 }
 
-const { pantalla, hora = '', class: className, id } = Astro.props;
+const { imagen, alt = '', sizes = '260px', prioridad = false, hora = '', class: className, id } = Astro.props;
 ---
 
-<div class:list={['phone', className]} id={id}>
-  <div class="phone__notch" aria-hidden="true"><span>{hora}</span><i></i><span></span></div>
-  {pantalla ? <Screen pantalla={pantalla} /> : <slot />}
+<div class:list={['phone', { 'phone--img': imagen }, className]} id={id}>
+  {imagen ? (
+    <Image
+      src={imagen}
+      alt={alt}
+      class="phone__img"
+      widths={[260, 520, 780]}
+      sizes={sizes}
+      loading={prioridad ? 'eager' : 'lazy'}
+      fetchpriority={prioridad ? 'high' : 'auto'}
+      decoding={prioridad ? 'auto' : 'async'}
+    />
+  ) : (
+    <>
+      <div class="phone__notch" aria-hidden="true"><span>{hora}</span><i></i><span></span></div>
+      <slot />
+    </>
+  )}
 </div>
+
+<style is:global>
+  .phone--img { aspect-ratio: 9 / 19.5; background: var(--negro); }
+  .phone__img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top; }
+</style>
