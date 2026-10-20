@@ -1,0 +1,84 @@
+---
+// Templates: packs de landings por rubro para quienes hacen webs (producto aparte, en templates.hawkendev.com).
+import Kicker from './Kicker.astro';
+import Phone from './phone/Phone.astro';
+import { templates } from '../config/home';
+import boxeo from '../assets/templates/boxeo.jpg';
+import padel from '../assets/templates/padel.jpg';
+import yoga from '../assets/templates/yoga.jpg';
+
+const imagenes: Record<string, ImageMetadata> = { boxeo, padel, yoga };
+---
+
+<section class="section wt" id="templates" aria-labelledby="t-templates">
+  <div class="wrap">
+    <Kicker numero="06" texto="Templates" />
+    <div class="sec-head">
+      <h2 id="t-templates">Landings listas para <span class="hl">vender</span> a tus clientes</h2>
+      <p class="lead">{templates.lead}</p>
+    </div>
+
+    <div class="tpl">
+      <div class="tpl__body">
+        <dl class="tpl__datos">
+          {templates.datos.map((d) => (
+            <div><dt>{d.texto}</dt><dd>{d.valor}</dd></div>
+          ))}
+        </dl>
+        <ul class="tpl__puntos">
+          {templates.puntos.map((p) => (
+            <li><b>{p.titulo}</b><span>{p.texto}</span></li>
+          ))}
+        </ul>
+        <div class="btns btns--full">
+          <a class="btn btn--lima" href={templates.url} target="_blank" rel="noopener">Ver los packs <span class="arr">↗</span></a>
+          <a class="btn btn--ghost" href={templates.demos} target="_blank" rel="noopener">Probar las demos de fitness</a>
+        </div>
+      </div>
+
+      <div class="tpl__fones">
+        {templates.muestras.map((m) => (
+          <a class="tpl__fon" href={`${templates.demos}${m.ruta}`} target="_blank" rel="noopener" aria-label={`Ver la demo de ${m.nombre}`}>
+            <Phone imagen={imagenes[m.imagen]} alt={`Landing de ejemplo: ${m.nombre}`} sizes="(max-width: 900px) 30vw, 200px" />
+            <span class="tpl__nom">{m.nombre}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .tpl { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: var(--s8); align-items: center; }
+  .tpl__body { display: flex; flex-direction: column; gap: var(--s4); min-width: 0; }
+
+  .tpl__datos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 0; border: var(--stroke) solid var(--edge); }
+  .tpl__datos div { display: flex; flex-direction: column-reverse; gap: 6px; padding: var(--s2); }
+  .tpl__datos div + div { border-left: var(--stroke) solid var(--edge); }
+  .tpl__datos div:first-child { background: var(--lima); }
+  dd { margin: 0; font-family: var(--display); font-size: clamp(24px, 2.6vw, 34px); line-height: 1; }
+  dt { font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; }
+
+  .tpl__puntos { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--s2); }
+  .tpl__puntos li { display: flex; flex-direction: column; gap: 4px; padding-left: 22px; position: relative; }
+  .tpl__puntos li::before { content: ''; position: absolute; left: 0; top: 7px; width: 10px; height: 10px; background: var(--violeta); }
+  .tpl__puntos b { font-size: 17px; }
+  .tpl__puntos span { font-size: 15px; color: var(--muted); }
+
+  /* Tres celulares escalonados: el del medio más arriba. */
+  .tpl__fones { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s3); align-items: start; }
+  .tpl__fon { display: flex; flex-direction: column; gap: 12px; color: inherit; text-decoration: none; transition: transform 0.2s var(--ease); }
+  .tpl__fon:nth-child(2) { margin-top: calc(-1 * var(--s6)); }
+  .tpl__fon:nth-child(odd) { margin-top: var(--s4); }
+  .tpl__fon:hover { transform: translateY(-6px); }
+  .tpl__nom { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+
+  @media (max-width: 900px) {
+    .tpl { grid-template-columns: 1fr; gap: var(--s6); }
+    .tpl__fones { gap: var(--s2); }
+    .tpl__fon:nth-child(2) { margin-top: 0; }
+    .tpl__fon:nth-child(odd) { margin-top: var(--s3); }
+    .tpl__nom { font-size: 10px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .tpl__fon { transition: none; } .tpl__fon:hover { transform: none; } }
+</style>

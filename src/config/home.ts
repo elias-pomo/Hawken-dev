@@ -29,3 +29,28 @@ export const preguntas: { pregunta: string; respuesta: string; pendiente?: true 
   { pregunta: '¿Qué pasa después de publicar?', respuesta: 'Confirmar qué soporte das después de publicar (el abono incluye soporte y cambios chicos según tu nota de precios).', pendiente: true },
   { pregunta: '¿Necesito tener dominio y hosting?', respuesta: 'Podemos trabajar con tu dominio propio. Si no tenés, lo gestiono yo.' },
 ];
+
+// Templates: producto aparte (templates.hawkendev.com) para quienes hacen webs.
+const TEMPLATES_URL = 'https://templates.hawkendev.com/';
+
+export const templates = {
+  url: TEMPLATES_URL,
+  demos: `${TEMPLATES_URL}packs/fitness/`,
+  lead: '¿Hacés webs? Armo packs de 10 landings por rubro para diseñadores y desarrolladores. Comprás el pack una vez y las adaptás para cada cliente.',
+  datos: [
+    { valor: '10', texto: 'landings por pack' },
+    { valor: '6', texto: 'rubros en camino' },
+    { valor: '2', texto: 'idiomas: español e inglés' },
+  ],
+  puntos: [
+    { titulo: 'Ninguna es la misma con otro color', texto: 'Cada landing tiene su tipografía, su paleta y su estructura.' },
+    { titulo: 'Una sección firma por negocio', texto: 'Timer de round, reserva de canchas, respiración guiada: algo que solo tiene sentido en ese rubro.' },
+    { titulo: 'HTML y Tailwind, sin build', texto: 'Se abren con doble clic y se publican en cualquier hosting.' },
+    { titulo: 'Licencia comercial', texto: 'Usalas en todos tus proyectos y en los de tus clientes.' },
+  ],
+  muestras: [
+    { imagen: 'boxeo', nombre: 'Black Ring, boxeo', ruta: '06-boxeo/' },
+    { imagen: 'padel', nombre: 'Punto de Oro, club de pádel', ruta: '08-padel/' },
+    { imagen: 'yoga', nombre: 'Alma, yoga y pilates', ruta: '03-yoga/' },
+  ],
+};

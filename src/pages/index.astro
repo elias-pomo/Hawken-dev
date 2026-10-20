@@ -8,6 +8,7 @@ import Servicios from '../components/Servicios.astro';
 import Proceso from '../components/Proceso.astro';
 import SobreMi from '../components/SobreMi.astro';
 import Preguntas from '../components/Preguntas.astro';
+import Templates from '../components/Templates.astro';
 import Cta from '../components/Cta.astro';
 
 const proyectos = (await getCollection('proyectos')).sort((a, b) => a.data.orden - b.data.orden);
@@ -34,6 +35,7 @@ const proyectos = (await getCollection('proyectos')).sort((a, b) => a.data.orden
     <Proceso />
     <SobreMi />
     <Preguntas />
+    <Templates />
     <Cta titulo="¿Arrancamos?" texto="Contame qué te quita tiempo y te digo cómo lo resolvería." mensaje="Hola Elias, quiero arrancar un proyecto para mi negocio: " />
   </main>
 </Base>

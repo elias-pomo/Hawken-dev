@@ -27,4 +27,5 @@ export const navLinks = [
   { href: '/#servicios', label: 'Servicios' },
   { href: '/#proceso', label: 'Proceso' },
   { href: '/#preguntas', label: 'Preguntas' },
+  { href: '/#templates', label: 'Templates' },
 ];
